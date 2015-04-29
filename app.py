@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, request, url_for
 from pymongo import Connection
-from utils import create_item, authenticate, create_wall
+from utils import create_item, authenticate, create_wall, add_comment, send_message
 
 app = Flask(__name__)
 
