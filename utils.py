@@ -1,10 +1,11 @@
 import hashlib, uuid #for password security
+from time import ctime
 
 ##########################     LOGIN/ REGISTER        ##########################
 
 #Creates new user in database.
-#user: {string:username, int:password, int:salt, list:int:private_walls, list:int:public_walls, list:string:friends, dict:conversations}
-#conversations can be structured :  {person_talked_to: {int:unread_count, messages:[{'sender':who_sent_this_message, string:'message_text', string:'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people....}
+#user: {string:username, int:password, int:salt, list:int:private_walls, list:int:public_walls, list:string:friends, dict:conversations, int:count_unread}
+#conversations can be structured :  {person_talked_to: {int:unread_count, messages:[{'sender':who_sent_this_message, string:'message_text', string:'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people:{}....}
 def register_user(form, db):
     user = {}
 
@@ -21,6 +22,7 @@ def register_user(form, db):
     user['public_walls'] = [] #ditto
     user['friends'] = [] #list of other users usernames
     user['conversations'] = {}
+    user['count_unread'] = 0 #number of total unread messages
     
     return db.users.insert(user)
     
@@ -53,6 +55,11 @@ def authenticate(username, password, db):
         return user
     else:
         return None
+        
+# update_dict must be in the form {field_to_update : new_val}
+def update_user(username, update_dict, db):
+        db.users.update({'username' : username}, {'$set' : update_dict}, upsert=True)
+        return True
 
 
 ##########################     WALLS        ##########################
@@ -73,3 +80,49 @@ def create_wall(name, description):
         wall['comments'] = []
         wall['num_comments'] = 0
         return "Wall" + name + "created"
+        
+        
+################################################# MESSAGES ##########################################################
+
+#sends message by updating the "conversations" key for each user. Conversations' value is a dictionary, each key being the username of the other side of a given conversation. The value of each such key is a list of dictionaries, each dictionary containing a given message's content, sender, and time of sending. Example:
+# 'conversations': {person_talked_to: {unread_count: #, messages:[{'sender':person_talked_to/me, 'message_text':'sup', 'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people....}
+#form must have a recipient listed, a message content
+def send_message(form, session, db):
+        recipient_username = form['recipient']
+        message = form['message']
+        sender_user_type = session['type']
+        recipient_cursor = db.users.find({'username':recipient_username})
+        recipient = {}
+        for t in recipient_cursor:
+                recipient = t
+        if recipient == {}:
+                return "invalid recipient"
+        conversations = recipient['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
+        time_total = str(ctime())
+        date = time_total[4:10] + ", " + time_total[20:25]
+        time = time_total[11:19]
+
+        #first update the dictionary of the recipient of the message
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date}]
+        unread_count = 1
+        #check if this conversation already exists. If so incorporate rest of conversation
+        if conversations.has_key(session['username']): #if they've already talked
+                add_message = conversations[session['username']]['messages']
+                for x in add_message:
+                        new_message.append(x) #so that new message is at the begginning
+                unread_count = conversations[session['username']]['unread_count'] + 1 #unread count in this specific conversation
+
+        conversations[session['username']] = {'unread_count':unread_count, 'messages':new_message} #insert as the new value in dict
+        count = recipient['count_unread'] + 1 #increment user's count of unread messages
+        update_user(recipient['username'], {'conversations':conversations, 'count_unread':count}, db)
+        
+        #update dictionary of the sender
+        conversations = session['conversations'] #list of dictionaries, each dictionary being a message that this recipient has already recieved
+        new_message = [{'sender':session['username'], 'message_text':message, 'time':time, 'date':date}]
+        if conversations.has_key(recipient['username']):
+                add_message = conversations[recipient['username']]['messages']
+                for x in add_message:
+                        new_message.append(x)
+        conversations[recipient['username']] = {'unread_count':0, 'messages':new_message}
+        update_user(session['username'], {'conversations':conversations}, db)
+        return message + " sent on " + date + " by " + session['username']
