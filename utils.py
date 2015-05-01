@@ -58,8 +58,8 @@ def authenticate(username, password, db):
         
 # update_dict must be in the form {field_to_update : new_val}
 def update_user(username, update_dict, db):
-        db.users.update({'username' : username}, {'$set' : update_dict}, upsert=True)
-        return True
+    db.users.update({'username' : username}, {'$set' : update_dict}, upsert=True)
+    return True
 
 
 ##########################     WALLS        ##########################
@@ -67,24 +67,58 @@ def update_user(username, update_dict, db):
 wall_count = 0
 
 #creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, list:dict:comments{string:comment,  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id}} 
-def create_wall(name, description):
+def create_wall(name, description, db):
     wall = {}
     if len(name) == 0:
         return "Name required"
     else:
         wall['name'] = name
+        repeated = db.walls.find_one( { 'name' : name } , { "_id" : False } )
+        if repeated != None:
+            return "Name taken"
         wall['description'] = description
-        global wall_count
+        global wall_count #to access the global variable
         wall_count += 1
         wall['wall_id'] = wall_count
         wall['comments'] = []
         wall['num_comments'] = 0
+        db.walls.insert(wall)
         return "Wall" + name + "created"
 
-#adds a comment        
+#adds a comment, must be given form with the comment, name of the current wall, session and db
+#if user is not yet liste as having that wall connected, adds the wall's id
 def add_comment(form, current_wall, session, db):
-    x = db.walls.find(name:current_wall)
-        
+    walls = db.walls.find_one( {'name':current_wall} )
+    
+    comment = {}
+    comment['comment'] = form['comment']
+    comment['up_votes'] = 0
+    
+    #for time stamp
+    time_total = str(ctime())
+    comment['date'] = time_total[4:10] + ", " + time_total[20:25]
+    comment['time'] = time_total[11:19]
+    
+    for w in walls:
+        wall = w
+    old_comments = wall['comments']
+    old_comments.append(comment)
+    update_wall(wall['name'], {'comments':comment, num_comments:wall['...']}, db}
+    
+    
+    
+def search_wall(form, db):
+    name = form['name']
+    wall = db.walls.find_one( { 'name' : name } , { "_id" : False } )
+    if wall == None:
+        return "Invalid search name"
+    for w in wall:
+        return w #Since name repeats aren't allowed, only one will be returned
+
+# update_dict must be in the form {field_to_update : new_val}
+def update_wall(name, update_dict, db):
+    db.wall.update({'name' : name}, {'$set' : update_dict}, upsert=True)
+    return True    
         
 ################################################# MESSAGES ##########################################################
 
