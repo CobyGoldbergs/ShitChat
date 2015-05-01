@@ -80,6 +80,10 @@ def create_wall(name, description):
         wall['comments'] = []
         wall['num_comments'] = 0
         return "Wall" + name + "created"
+
+#adds a comment        
+def add_comment(form, current_wall, session, db):
+    x = db.walls.find(name:current_wall)
         
         
 ################################################# MESSAGES ##########################################################
