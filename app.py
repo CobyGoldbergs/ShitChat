@@ -1,6 +1,6 @@
-from flask import Flask, flash, session, request, url_for
+from flask import Flask, flash, session, request, url_for, render_template
 from pymongo import Connection
-from utils import create_item, authenticate, create_wall
+#from utils import create_item, authenticate, create_wall
 
 app = Flask(__name__)
 
@@ -8,6 +8,7 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
+'''
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -52,11 +53,13 @@ def login():
             flash("Your username or password is incorrect")
             return redirect('login')
 
+'''
+
 #home pages includes: list of trending stall walls, each of which is a link to the wall, list of private walls (also links), list of online friends, button to see inbox of messages
 #can later add random wall button
 #to access existing walls i thought it'd be a list of links?
 @app.route("/home", methods=["GET", "POST"])
-@auth("/home")
+#@auth("/home")
 def home():
     if request.method == "GET":
         return render_template("home.html")
@@ -73,11 +76,12 @@ def home():
                 flash(res)
                 return redirect('home') #or maybe move them to the newly created wall page
 
+'''
 #simple inbox to see past conversations
 @app.route("/inbox", methods=["GET", "POST"])
 @auth("/inbox")
 def inbox():
-
+'''
 
 
 if __name__ == "__main__":

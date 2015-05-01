@@ -8,6 +8,34 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <title>ShitChat</title>
 
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+	<a class="navbar-brand" href="#">ShitChat</a>
+	</div>
+  <div class="container">
+    <ul class="nav navbar-nav">
+	<li class="active"><a href="/home">Home <span class="sr-only">(current)</span></a></li>
+	<li><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
+	<li><a href="#">Link <span class="sr-only">(current)</span></a></li>
+    </ul>
+	<span style="line-height:5x;">
+	<form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search for a Wall" name="name">
+        </div>
+        <input type="submit" name="b" class="btn btn-success" value="search">
+      </form>
+	</span>
+    <span style="line-height:5px;">
+          <form class="navbar-form navbar-right" method="POST">
+	    <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
+            <input type="submit" name="b" class="btn btn-danger" value="Log Out">
+	    <input type="submit" name="b" class="btn btn-primary" value="Settings">
+          </form>
+	</span>
+  </div>
+</nav>
+
 
 
 
