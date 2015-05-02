@@ -1,6 +1,7 @@
-from flask import Flask, flash, session, request, url_for
+from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import create_item, authenticate, create_wall, add_comment, send_message
+from utils import authenticate, create_wall, add_comment, send_message
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -27,7 +28,7 @@ def register():
     else:
         message = validate(request.form['username'], request.form['password'], db)
         if message == 'Valid':
-            register_user(request.form, db):
+            register_user(request.form, db)
             flash('Account created')
             return redirect("login")
         else:
@@ -56,7 +57,7 @@ def login():
 #can later add random wall button
 #to access existing walls i thought it'd be a list of links?
 @app.route("/home", methods=["GET", "POST"])
-@auth("/home")
+#@auth("/home") To be readded once login is there
 def home():
     if request.method == "GET":
         return render_template("home.html")
@@ -74,9 +75,9 @@ def home():
                 return redirect('home') #or maybe move them to the newly created wall page
 
 #simple inbox to see past conversations
-@app.route("/inbox", methods=["GET", "POST"])
-@auth("/inbox")
-def inbox():
+#@app.route("/inbox", methods=["GET", "POST"])
+#@auth("/inbox")
+#def inbox():
 
 
 

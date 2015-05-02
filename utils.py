@@ -92,6 +92,10 @@ def add_comment(form, current_wall, session, db):
     
     comment = {}
     comment['comment'] = form['comment']
+
+    if form['comment'] == None:
+        return 'Comment field left blank'
+
     comment['up_votes'] = 0
     
     #for time stamp
@@ -103,7 +107,9 @@ def add_comment(form, current_wall, session, db):
         wall = w
     old_comments = wall['comments']
     old_comments.append(comment)
-    update_wall(wall['name'], {'comments':comment, num_comments:wall['...']}, db}
+    num_comments = wall['num_comments'] + 1
+    update_wall(wall['name'], {'comments':comment, num_comments:num_comments}, db)
+    return "comment added"
     
     
     
