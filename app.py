@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import authenticate, create_wall, add_comment, send_message
+from utils import authenticate, create_wall, add_comment, validate, register_user
 from functools import wraps
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ def register():
     if request.method == "GET":
         return redirect("register")
     else:
-        message = validate(request.form['username'], request.form['password'], db)
+        message = validate(request.form['email'], request.form['password'], db)
         if message == 'Valid':
             register_user(request.form, db)
             flash('Account created')
@@ -65,14 +65,16 @@ def home():
         if request.form['b'] == "Inbox":
              return redirect("inbox")
         if request.form['b'] == "Create Wall":
-            #there needs to be a way for the info to be inserted
-            res = create_wall(request.form['name'], request.form['description'])
+            #there needs to be a way for the info to be inserted, with fields for wall name and description
+            res = create_wall(request.form['wall_name'], request.form['description'])
             if res == "Name required":
                 flash(res)
                 return redirect('home')
             else:
                 flash(res)
                 return redirect('home') #or maybe move them to the newly created wall page
+        if request.form['b'] == "Log Out":
+            return logout()
 
 #simple inbox to see past conversations
 #@app.route("/inbox", methods=["GET", "POST"])
@@ -80,6 +82,11 @@ def home():
 #def inbox():
 
 
+#basic log out method
+def logout():
+    session.pop('logged_in', None)
+    flash("You have been logged out")
+    return redirect('/')
 
 if __name__ == "__main__":
 	app.debug = True
