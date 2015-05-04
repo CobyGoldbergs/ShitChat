@@ -2,9 +2,17 @@
 <html>
   <head>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    </head>
+
+</head>
   <body>
-    <div id="block">
-      <script src="../message.js"></script>
-    </div>
+      
+      <div style="overflow:scroll; height:200px; width: 200px; border:1px solid black;" id="block">
+      </div>
+
+      <input name="textbox1" id="textbox1" type="text">
+      <input name="send" onclick="send(document.getElementById('textbox1').value)" type="button" value="send">
+
+
+    <script src="../message.js"></script>
+        </body>
 </html>
