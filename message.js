@@ -7,7 +7,7 @@ var block = d3.select("#block");
 //}
 
 function send(message){
-    block.append("").text(message);
+    block.append("p").text(message);
     document.getElementById('textbox1').value = "";
     objDiv = document.getElementById("block");
     objDiv.scrollTop = objDiv.scrollHeight;
