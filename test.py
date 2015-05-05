@@ -15,6 +15,14 @@ def messages():
 def walls():
     return render_template("walls.html")
 
+@app.route("/create", methods = ["POST", "GET"])
+def create():
+    return render_template("create.html")
+
+@app.route("/login", methods = ["POST", "GET"])
+def login():
+    return render_template("login.html")
+
 
 if __name__=="__main__":
     app.debug = True
