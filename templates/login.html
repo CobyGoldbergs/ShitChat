@@ -10,7 +10,7 @@
 
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="navbar-header">
-	<a class="navbar-brand" href="#">ShitChat</a>
+	<strong><a class="navbar-brand" href="#">ShitChat</a></strong>
 	</div>
   <div class="container">
     <span style="line-height:5px;">
@@ -26,18 +26,18 @@
 <body style="padding-top:70px">
 <div class="container-fluid">
 
-<center><div class="jumbotron" style="max-width:730px;">
+<center><div class="jumbotron" style="max-width:730px; background-color: #0B3861;">
         <h2>Log In</h2>
         <form role="form" class="form-horizontal" method="POST">
           <div class="form-group">
-        	   <p><input type="text" class="form-control" name="username" placeholder="Username"></p>
+        	   <p><input type="text" class="form-control" name="email" placeholder="Email"></p>
         	   <p><input type="password" class="form-control" name="password" placeholder="Password"></p>
                {% if message is defined %}
                <div class="alert alert-danger " role="alert">
                    {{message}}
                </div>
                {% endif %}
-        	   <p><input type="submit" name="b" class="btn btn-danger" value="Log In">
+        	   <p><input type="submit" name="b" class="btn btn-success" value="Start Poopin'">
   	         <input type="submit" name="b" class="btn btn-default" value="Cancel"></p>
           </div>
         </div>
