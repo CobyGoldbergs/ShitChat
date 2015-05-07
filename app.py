@@ -9,13 +9,15 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
+
+
 def auth(page):
     def decorate(f):
         @wraps(f)
         def inner(*args, **kwargs):
             if 'logged_in' not in session:
                 flash("You must be logged in to see this page")
-                return redirect('/')
+                return redirect('login')
             return f(*args, **kwargs)
         return inner
     return decorate
@@ -24,40 +26,54 @@ def auth(page):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return redirect("register")
+        return render_template("register.html")
     else:
-        message = validate(request.form['email'], request.form['password'], db)
-        if message == 'Valid':
-            register_user(request.form, db)
-            flash('Account created')
+        if request.form["b"] == "Start Poopin'":
+            message = validate(request.form, db)
+            if message == 'Valid':
+                register_user(request.form, db)
+                flash('Account created')
+                return redirect("login")
+            else:
+                return render_template("register.html", message = message)
+        elif request.form["b"] == "Log In":
             return redirect("login")
+        elif request.form["b"] == "About":
+            return redirect("about")
         else:
-            flash(message)
-            return redirect("register")
+            return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return redirect("login")
+        return render_template("login.html")
     else:
-        user = authenticate(request.form["username"], request.form["password"], db)
-        if user:
-            # Loops over dictionary, creates new session element for each key
-            for key in user.keys():
-                session[key] = user[key]
-                session["logged_in"] = True
-                flash("Welcome, " + session['username'])
+        if request.form["b"] == "Start Poopin'":
+            user = authenticate(request.form["email"], request.form["password"], db)
+            if user:
+                # Loops over dictionary, creates new session element for each key
+                for key in user.keys():
+                    session[key] = user[key]
+                    session["logged_in"] = True
+                print "Welcome, " + session['first_name']
                 return redirect("home")
-        else:
-            flash("Your username or password is incorrect")
-            return redirect('login')
+            else:
+                flash("Your username or password is incorrect")
+                return render_template('login')
+        elif request.form["b"] == "Cancel":
+            return redirect("login")
+        elif request.form["b"] == "Sign Up":
+            return redirect("register")
+        elif request.form["b"] == "About":
+            return redirect("about")
 
 #home pages includes: list of trending stall walls, each of which is a link to the wall, list of private walls (also links), list of online friends, button to see inbox of messages
 #can later add random wall button
 #to access existing walls i thought it'd be a list of links?
+@app.route("/", methods=["GET", "POST"])
 @app.route("/home", methods=["GET", "POST"])
-#@auth("/home") To be readded once login is there
+@auth("/home") #To be readded once login is there
 def home():
     if request.method == "GET":
         return render_template("home.html")
@@ -86,7 +102,7 @@ def home():
 def logout():
     session.pop('logged_in', None)
     flash("You have been logged out")
-    return redirect('/')
+    return redirect('home')
 
 if __name__ == "__main__":
 	app.debug = True
