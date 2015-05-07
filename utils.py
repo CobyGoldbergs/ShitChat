@@ -35,15 +35,17 @@ def register_user(form, db):
     
 
 #ensures a valid username and password, when being registered
-def validate(first_name, last_name, email, password, db):
-    email_new = db.users.find_one( { 'email' : email } , { "_id" : False } )
+def validate(form, db):
+    email_new = db.users.find_one( { 'email' : form['email'] } , { "_id" : False } )
     if email_new == None:
-        if len(first_name) == 0:
+        if len(form['first_name']) == 0:
             return 'No first name entered'
-        if len(last_name) == 0:
+        if len(form['last_name']) == 0:
             return 'No last name entered'
-        elif len(password) > 5:
+        elif len(form['password']) < 5:
             return 'Invalid password. Must be at least five characters.'
+        elif form['password'] != form['password_confirm']:
+            return "Password and confirm don't match"
         else:
             return 'Valid'
     else:
