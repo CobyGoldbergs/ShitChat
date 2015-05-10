@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html lang="en">
+
+{% for wall in walls %}
+<p> {{wall['name']}} : {{wall['description']}}
+<br>
+{{wall['tags']}}
+<a href=/wall/{{wall['wall_id']}}> {{wall['name']}} </a>
+{%endfor%}
+
+
+
+
+</html>
