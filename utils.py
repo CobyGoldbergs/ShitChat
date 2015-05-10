@@ -5,7 +5,7 @@ from time import ctime
 
 user_count = 0
 #Creates new user in database.
-#user: {string:first_name, string:last_name, string:email int:user_id, int:password, int:salt, list:int:private_walls, list:int:public_walls, list:int:friends, dict:conversations, int:count_unread}
+#user: {string:first_name, string:last_name, string:email int:user_id, int:password, int:salt, list:int:private_walls, list:int:public_walls, list:int:friends, dict:conversations, int:count_unread, boolean:logged_in}
 #conversations can be structured :  {person_talked_to: {int:unread_count, messages:[{'sender':who_sent_this_message, string:'message_text', string:'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people:{}....}
 def register_user(form, db):
     user = {}
@@ -30,6 +30,8 @@ def register_user(form, db):
     user['friends'] = [] #list of other users ids
     user['conversations'] = {}
     user['count_unread'] = 0 #number of total unread messages
+
+    user['logged_in'] = False
     
     return db.users.insert(user)
     
@@ -62,7 +64,10 @@ def authenticate(email, password, db):
     salt = user["salt"]
     hash_pass = user["password"]
     hash_confirm = hashlib.sha512(salt + password).hexdigest()
+    
     if hash_pass == hash_confirm:
+        update_user(user['email'], {'logged_in': True}, db)
+        user = db.users.find_one( { 'email' : email } , { "_id" : False } ) #make it the one with logged_in set true
         return user
     else:
         return None
@@ -76,25 +81,33 @@ def update_user(email, update_dict, db):
 
 wall_count = 0
 
-#creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, list:dict:comments{string:comment, string:user's name  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id}} 
-def create_wall(name, description, db):
+#creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, list:dict:comments{string:comment, string:user's name  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id, list:strings:tags}} 
+def create_wall(name, description, session, db):
     wall = {}
     if len(name) == 0:
         return "Name required"
     else:
         wall['name'] = name
-        repeated = db.walls.find_one( { 'name' : name } , { "_id" : False } )
-        if repeated != None:
-            return "Name taken"
+        #repeated = db.walls.find_one( { 'name' : name } , { "_id" : False } )
+        #if repeated != None:
+            #return "Name taken"
         wall['description'] = description
         global wall_count #to access the global variable
         wall_count += 1
         wall['wall_id'] = wall_count
         wall['comments'] = []
         wall['num_comments'] = 0
+        wall['tags'] = []
+        wall['creator'] = session['name']
         db.walls.insert(wall)
+
+        #ensures that the user has a list of ids of all walls which he/ she created
+        id_list = session['public_walls']
+        id_list.append(wall['wall_id'])
+        update_user(session['email'], {'public_walls':id_list}, db)
+
         print "Wall" + name + "created"
-        return "Wall" + name + "created"
+        return "Wall " + name + " created"
 
 #adds a comment, must be given form with the comment, name of the current wall, session and db
 #if user is not yet liste as having that wall connected, adds the wall's id
@@ -128,22 +141,18 @@ def add_comment(form, current_wall, session, db):
     num_comments = wall['num_comments'] + 1
     update_wall(wall['name'], {'comments':comment, 'num_comments':num_comments}, db)
 
-    #ensures that the user has a list of ids of all walls on which he/ she has commented
-    id_list = session['public_walls']
-    id_list.append(wall['wall_id'])
-    update_user(session['email'], {'public_walls':id_list}, db)
-
     return "comment added"
-    
-    
     
 def search_wall(form, db):
     name = form['name']
-    wall = db.walls.find_one( { 'name' : name } , { "_id" : False } )
-    if wall == None:
-        return "Invalid search name"
-    for w in wall:
-        return w #Since name repeats aren't allowed, only one will be returned
+    wall_name = db.walls.find( { 'name' : name } , { "_id" : False } )
+    wall_tags = db.walls.find( { 'tags': { '$in': [name]}}, { "_id" : False } )
+    ret = []
+    for w in wall_name:
+        ret.append(w)
+    for w in wall_tags:
+        ret.append(w)
+    return ret
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_wall(name, update_dict, db):

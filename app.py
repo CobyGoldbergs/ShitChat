@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import authenticate, create_wall, add_comment, validate, register_user
+from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall
 from functools import wraps
 
 app = Flask(__name__)
@@ -9,7 +9,9 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
-
+#walls = db.walls.find()
+#for w in walls:
+ #   print w
 
 def auth(page):
     def decorate(f):
@@ -55,12 +57,11 @@ def login():
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
-                    session["logged_in"] = True
                 print "Welcome, " + session['first_name']
                 return redirect("home")
             else:
                 flash("Your username or password is incorrect")
-                return render_template('login')
+                return redirect('login')
         elif request.form["b"] == "Cancel":
             return redirect("login")
         elif request.form["b"] == "Sign Up":
@@ -78,6 +79,7 @@ def home():
     if request.method == "GET":
         return render_template("home.html")
     else:
+        print request.form['b']
         if request.form['b'] == "Inbox":
              return redirect("inbox")
         if request.form['b'] == "Create Wall":
@@ -91,16 +93,45 @@ def home():
                 return redirect('home') #or maybe move them to the newly created wall page
         if request.form['b'] == "Log Out":
             return logout()
+        if request.form['b'] == "search":
+            print 'hey'
+            x = search_wall(request.form, db)
+            return render_template("search_results.html", walls = x)
 
 #simple inbox to see past conversations
 #@app.route("/inbox", methods=["GET", "POST"])
 #@auth("/inbox")
 #def inbox():
 
+@app.route("/create_wall", methods=["GET", "POST"])
+def create_w():
+    if request.method == "GET":
+        return render_template("create_wall.html")
+    else:
+        if request.form["b"] == "Start Poopin'":
+            res = create_wall(request.form["name"], request.form["description"], db)
+            success = "Wall " + request.form["name"] + " created"
+            if res == success:
+                print "yay!"
+                return redirect('home')
+            else:
+                return redirect('create_wall')
+
+@app.route("/wall/<wall_id>", methods=["GET", "POST"])
+def wall_page(wall_id):
+    x = int(wall_id)
+    wall = db.walls.find_one( { 'wall_id' : x } ) 
+    print wall
+    return redirect('home')
 
 #basic log out method
 def logout():
     session.pop('logged_in', None)
+
+    user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+
+    update_user(user['email'], {'logged_in': False}, db)
+
     flash("You have been logged out")
     return redirect('home')
 
