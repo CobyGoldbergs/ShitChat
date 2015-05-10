@@ -81,7 +81,7 @@ def update_user(email, update_dict, db):
 
 wall_count = 0
 
-#creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, list:dict:comments{string:comment, string:user's name  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id, list:strings:tags}} 
+#creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, int:up_votes list:dict:comments{string:comment, string:user's name  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id, list:strings:tags}} 
 def create_wall(name, description, session, db):
     wall = {}
     if len(name) == 0:
@@ -98,7 +98,8 @@ def create_wall(name, description, session, db):
         wall['comments'] = []
         wall['num_comments'] = 0
         wall['tags'] = []
-        wall['creator'] = session['name']
+        wall['creator'] = session['email']
+        wall['up_votes'] = 0
         db.walls.insert(wall)
 
         #ensures that the user has a list of ids of all walls which he/ she created

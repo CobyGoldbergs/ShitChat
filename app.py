@@ -2,6 +2,7 @@ from flask import Flask, flash, session, request, url_for, redirect, render_temp
 from pymongo import Connection
 from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall
 from functools import wraps
+import pymongo
 
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ db = conn['users']
 
 #walls = db.walls.find()
 #for w in walls:
- #   print w
+#    print w
 
 def auth(page):
     def decorate(f):
@@ -77,7 +78,8 @@ def login():
 @auth("/home") #To be readded once login is there
 def home():
     if request.method == "GET":
-        return render_template("home.html")
+        walls = db.walls.find().sort('up_votes', pymongo.DESCENDING)
+        return render_template("home.html", walls=walls)
     else:
         print request.form['b']
         if request.form['b'] == "Inbox":
@@ -109,7 +111,7 @@ def create_w():
         return render_template("create_wall.html")
     else:
         if request.form["b"] == "Start Poopin'":
-            res = create_wall(request.form["name"], request.form["description"], db)
+            res = create_wall(request.form["name"], request.form["description"],session, db)
             success = "Wall " + request.form["name"] + " created"
             if res == success:
                 print "yay!"
