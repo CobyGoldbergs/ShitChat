@@ -12,7 +12,7 @@ db = conn['users']
 
 #walls = db.walls.find()
 #for w in walls:
-#    print w
+ #   print w
 
 def auth(page):
     def decorate(f):
@@ -29,7 +29,12 @@ def auth(page):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html")
+        users = db.users.find()
+        count = 0
+        for u in users:
+            if u['logged_in'] == True:
+                count += 1
+        return render_template("register.html", logged_in = count)
     else:
         if request.form["b"] == "Start Poopin'":
             message = validate(request.form, db)
@@ -50,7 +55,12 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        users = db.users.find()
+        count = 0
+        for u in users:
+            if u['logged_in'] == True:
+                count += 1
+        return render_template("login.html", logged_in = count)
     else:
         if request.form["b"] == "Start Poopin'":
             user = authenticate(request.form["email"], request.form["password"], db)

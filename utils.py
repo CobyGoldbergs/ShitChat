@@ -31,6 +31,8 @@ def register_user(form, db):
     user['conversations'] = {}
     user['count_unread'] = 0 #number of total unread messages
 
+    user['walls_upped'] = [] #list of ids of walls already upvoted
+
     user['logged_in'] = False
     
     return db.users.insert(user)
@@ -155,7 +157,27 @@ def search_wall(form, db):
         ret.append(w)
     return ret
 
+#method for when a wall is upvoted
+def up_vote(wall_id, session, db):
+    #update the wall with the upvote
+    wall = db.walls.find_one( {'wall_id': wall_id} )
+    up_count = wall['up_votes'] + 1
+    update_wall(wall_id, {'up_votes': up_count}, db)
+
+    #update the session with the wall upvoted, so user cant double dip
+    walls_upped = session['walls_upped']
+    walls_upped.append(wall_id)
+    session['walls_upped'] = walls_upped
+
+    #update the user itself
+    update_user(session['email'], {'walls_upped': walls_upped}, db)
+    
+    #so the actual copy of session can be updated
+    return session['walls_upped']
+
+
+
 # update_dict must be in the form {field_to_update : new_val}
-def update_wall(name, update_dict, db):
-    db.wall.update({'name' : name}, {'$set' : update_dict}, upsert=True)
+def update_wall(wall_id, update_dict, db):
+    db.wall.update({'wall_id' : wall_id}, {'$set' : update_dict}, upsert=True)
     return True
