@@ -27,6 +27,10 @@ def login():
 def register():
     return render_template("register.html")
 
+@app.route("/stall", methods = ["POST", "GET"])
+def stall():
+    return render_template("stall.html")
+
 
 if __name__=="__main__":
     app.debug = True

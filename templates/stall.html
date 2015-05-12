@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html lang="en">
+
+
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <title>ShitChat</title>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+	<a class="navbar-brand" href="#">ShitChat</a>
+	</div>
+  <div class="container">
+    <ul class="nav navbar-nav">
+	<li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
+	<li><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
+    </ul>
+	<span style="line-height:5px;">
+	<form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+        </div>
+        <input type="submit" name="b" class="btn btn-success" value="search">
+	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
+      </form>
+	</span>
+    <span style="line-height:5px;">
+          <form class="navbar-form navbar-right" method="POST">
+	    <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
+            <input type="submit" name="b" class="btn btn-danger" value="Log Out">
+	    <input type="submit" name="b" class="btn btn-primary" value="Settings">
+          </form>
+	</span>
+  </div>
+</nav>
+</head>
+
+<body style="padding-top:70px; background-image:url('./static/IMG_0326 copy.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-3"><p></p></div>
+<div class="col-lg-6">
+<div class="jumbotron" style="background: rgba(100, 100, 100, 0.2);">
+<h1 style="font-family: 'Comic Sans MS', cursive, sans-serif;">     Hello World</h1>
+</div>
+
+
+</div>
+</div></div>
+
+
+
+</body>
+</html>
