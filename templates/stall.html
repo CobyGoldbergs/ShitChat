@@ -38,7 +38,10 @@
 </nav>
 </head>
 
-<body style="padding-top:70px; background-image:url('./static/IMG_0326 copy.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
+<body style="padding-top:70px; background-image:url('./static/IMG_0326 copy.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center center; -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;">
 <div class="container-fluid">
 <div class="row">
 <div class="col-lg-3"><p></p></div>
@@ -49,10 +52,12 @@
 </center>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
+<p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
+<p style="font-family: 'Comic Sans MS', cursive, sans-serif; color: #00ff00;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
@@ -64,11 +69,15 @@
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
 <p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
-<p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
-<p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</p>
-</div>
-<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px;">
-<p><input type="text" class="form-control" placeholder="What's Poopin'?" name="post"></p>
+<p style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World 
+0
+down vote
+I think for your purpose it'd be best to only worry about affix for the side nav, and use CSS positioning for your Jumbotron (just like Bootstrap does for the navbar at the top).
+
+For the jumbotron, set the position to fixed and give it an explicit top (50px is the height of the navbar above it), set the width to 100% if you want it to stretch across the viewport, and give it an explicit height. Then set the z-index to a value higher than 1 and less than 1030 (the z-index given to the navbar by Bootstrap). This will make sure your content scrolls behind your jumbotron.</p>
+<hr>
+<h5><input type="text" class="form-control" placeholder="What's Poopin'?" name="post"> <input type="submit" name="b" class="btn btn-primary" value="Post"></h5>
+<h5><input id="color" class="color"></h5>
 </div>
 
 
@@ -76,6 +85,6 @@
 </div></div>
 
 
-
+<script type="text/javascript" src="../jscolor/jscolor.js"></script>
 </body>
 </html>
