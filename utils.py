@@ -112,39 +112,41 @@ def create_wall(name, description, session, db):
         print "Wall" + name + "created"
         return "Wall " + name + " created"
 
-#adds a comment, must be given form with the comment, name of the current wall, session and db
+#adds a comment, must be given form with the comment, id of the current wall, session and db
 #if user is not yet liste as having that wall connected, adds the wall's id
 def add_comment(form, current_wall, session, db):
-    walls = db.walls.find_one( {'name':current_wall} )
-    
-    comment = {}
-    comment['comment'] = form['comment']
+    wall = db.walls.find_one( {'wall_id':current_wall} )
 
-    if form['comment'] == None:
+    comment = {}
+    comment['comment'] = form['post']
+
+    if form['post'] == '':
         return 'Comment field left blank'
 
     comment['up_votes'] = 0
     
+
     #for time stamp
     time_total = str(ctime())
     comment['date'] = time_total[4:10] + ", " + time_total[20:25]
     comment['time'] = time_total[11:19]
 
+    comment['color'] = form['color']
     #Points comment to a user
     comment['user_id'] = session['user_id']
-    name = str(session['first_name'] + session['last_name']) #For ease of displaying the name
+    name = str(session['first_name'] + " " + session['last_name']) #For ease of displaying the name
     comment['user_name'] = name
-    
-    for w in walls:
-        wall = w
 
     #updates the wall with new comment list, and a new number
     old_comments = wall['comments']
-    old_comments.append(comment)
-    num_comments = wall['num_comments'] + 1
-    update_wall(wall['name'], {'comments':comment, 'num_comments':num_comments}, db)
+    new_comment = [comment]
+    for com in old_comments:
+        new_comment.append(com)
+    num_comments = int(wall['num_comments']) + 1
 
-    return "comment added"
+    update_wall(current_wall, {'comments': new_comment, 'num_comments': num_comments}, db)
+
+    return "Check"
     
 def search_wall(form, db):
     name = form['name']
@@ -179,5 +181,5 @@ def up_vote(wall_id, session, db):
 
 # update_dict must be in the form {field_to_update : new_val}
 def update_wall(wall_id, update_dict, db):
-    db.wall.update({'wall_id' : wall_id}, {'$set' : update_dict}, upsert=True)
+    db.walls.update({'wall_id' : wall_id}, {'$set' : update_dict}, upsert=True)
     return True

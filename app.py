@@ -1,8 +1,9 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall
+from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall, update_wall
 from functools import wraps
 import pymongo
+import operator
 
 app = Flask(__name__)
 
@@ -13,6 +14,8 @@ db = conn['users']
 #walls = db.walls.find()
 #for w in walls:
  #   print w
+
+#db.walls.remove()
 
 def auth(page):
     def decorate(f):
@@ -132,9 +135,18 @@ def create_w():
 @app.route("/wall/<wall_id>", methods=["GET", "POST"])
 def wall_page(wall_id):
     x = int(wall_id)
-    wall = db.walls.find_one( { 'wall_id' : x } ) 
-    print wall
-    return redirect('home')
+    wall = db.walls.find_one( { 'wall_id' : x } )
+    if request.method == "GET":
+        return render_template("stall.html", wall=wall)
+    else:
+        if request.form["b"] == "Log Out":
+            return logout()
+        if request.form["b"] == "Post":
+            resp = add_comment(request.form, x, session, db)
+            if resp == "Comment field left blank":
+                return render_template("stall.html", wall=wall)
+            else:
+                return render_template("stall.html", wall=wall)
 
 #basic log out method
 def logout():
