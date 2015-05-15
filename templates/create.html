@@ -50,8 +50,19 @@
           <div class="form-group">
         	   <p><input type="text" class="form-control" name="name" placeholder="Wall Name" required></p>
         	   <p><textarea class="form-control" name="description" placeholder="Description" required></textarea></p>
+		   <h4><input type="radio" name="type" value="writing" checked> Writting Wall</h4><h4> <input type="radio" name="type" value="drawing"> Drawing Wall</h4>
 		   <h4>Tags:</h4>
-		   <p><input type="text" class="form-control" name="tag1" style="width: 50%;"></p>
+		   <div class="col-sm-6">
+			<p><input type="text" class="form-control" name="tag1"></p>
+			<p><input type="text" class="form-control" name="tag2"></p>
+			<p><input type="text" class="form-control" name="tag3"></p>
+		   </div>
+		   <div class="col-sm-6">
+			
+			<p><input type="text" class="form-control" name="tag4"></p>
+			<p><input type="text" class="form-control" name="tag5"></p>
+			<p><input type="text" class="form-control" name="tag6"></p>
+		   </div>
         	   <p><input type="submit" name="b" class="btn btn-success" value="Start Poopin'">
   	         <input type="submit" name="b" class="btn btn-default" value="Cancel"></p>
           </div>
