@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall, update_wall
+from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall, update_wall, up_vote
 from functools import wraps
 import pymongo
 import operator
@@ -136,6 +136,9 @@ def create_w():
 def wall_page(wall_id):
     x = int(wall_id)
     wall = db.walls.find_one( { 'wall_id' : x } )
+    upped = False
+    if x in wall['walls_upped']:
+        upped = True
     if request.method == "GET":
         return render_template("stall.html", wall=wall)
     else:
@@ -143,10 +146,19 @@ def wall_page(wall_id):
             return logout()
         if request.form["b"] == "Post":
             resp = add_comment(request.form, x, session, db)
+            wall = db.walls.find_one( { 'wall_id' : x } )
             if resp == "Comment field left blank":
                 return render_template("stall.html", wall=wall)
             else:
                 return render_template("stall.html", wall=wall)
+        if request.form["b"] == "up_vote":
+            new_ses = up_vote(x, session, db)
+            session['walls_upped'] = new_ses
+            wall = db.walls.find_one( { 'wall_id' : x } )
+            return render_template("stall.html", wall=wall)
+        if request.form["b"] == "search":
+            x = search_wall(request.form, db)
+            return render_template("search_results.html", walls = x)
 
 #basic log out method
 def logout():
