@@ -44,13 +44,22 @@
   background-size: cover;">
 <div class="container-fluid">
 <div class="row">
-<div class="col-lg-3"><p></p></div>
+<div class="col-lg-3">
+<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px; height: 100%; overflow: scroll;">
+<center>
+<h3>Description</h3>
+</center>
+<h4>{{wall['description']}}</h4>
+
+
+</div>
+
+
+</div>
 <div class="col-lg-6">
 <div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px; height: 100%; overflow: scroll;">
 <center>
-<h2>{{wall['name']}}</h2>
-<h4>{{wall['description']}}</h4>
-<h6>{{wall['up_votes']}} Up Votes </h6>
+<h2><span class="label label-success" style="float: left;">{{wall['up_votes']}}</span>{{wall['name']}} Name <button type="button" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;"><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button></h2>
 </center>
 
 {% for comment in wall['comments'] %}
@@ -59,17 +68,35 @@
 
 <form method="POST">
 <hr>
-<h5>Post Color: <input class="color" value="000000" name="color"></h5>
-<h5><input type="text" class="form-control" placeholder="What's Poopin'?" name="post"> </h5><h5><input type="submit" name="b" class="btn btn-success" value="Post"></h5>
+<h5>Post Color: <input class="color" value="000000" name="color" style="width:70px;"></h5>
+<h5><input type="text" class="form-control" placeholder="What's Poopin'?" name="post"> </h5><h5><input type="submit" name="b" class="btn btn-info" value="Post"></h5>
 </form>
 
 </div>
+</div>
+
+
+<div class="col-lg-3">
+<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-left: 30px; height: 100%; overflow: scroll;">
+<center><h3>Rules:<h3></center>
+<h5>Some shit over here to even it out</h5>
+<h5>Contributers: 1234532</h5>
+<h5>Created date/date</h5>
+<h5>Maybe just a bunch of rules? Description can be for what its for, rules are for what its not for? I'm also writing all this to see what a paragraph here looks like</h5>
+
 
 
 </div>
-</div></div>
-
-
+</div>
+</div>
+</div>
 <script type="text/javascript" src="../static/js/jscolor/jscolor.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
