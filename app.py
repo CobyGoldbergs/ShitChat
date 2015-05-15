@@ -121,7 +121,7 @@ def home():
 @app.route("/create_wall", methods=["GET", "POST"])
 def create_w():
     if request.method == "GET":
-        return render_template("create_wall.html")
+        return render_template("create.html")
     else:
         if request.form["b"] == "Start Poopin'":
             res = create_wall(request.form["name"], request.form["description"],session, db)

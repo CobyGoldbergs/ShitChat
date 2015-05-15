@@ -38,12 +38,29 @@
 </nav>
 </head>
 
-<body style="padding-top:70px; background-image:url('./static/IMG_0319.JPG'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
+<body style="padding-top:70px;">
 <div class="container-fluid">
 <div class="row">
-<div width="400px"></div>
-<div>
-<h1 style="font-family: 'Comic Sans MS', cursive, sans-serif;">Hello World</h1>
+<div class="col-lg-3"><p></p></div>
+<div class="col-lg-6">
+<div class="jumbotron" style="background-color: #0B3861; overflow: scroll;">
+<center><h1>Create a Wall</h1></center>
+
+<form role="form" class="form-horizontal" method="POST">
+          <div class="form-group">
+        	   <p><input type="text" class="form-control" name="name" placeholder="Wall Name" required></p>
+        	   <p><textarea class="form-control" name="description" placeholder="Description" required></textarea></p>
+		   <h4>Tags:</h4>
+		   <p><input type="text" class="form-control" name="tag1" style="width: 50%;"></p>
+        	   <p><input type="submit" name="b" class="btn btn-success" value="Start Poopin'">
+  	         <input type="submit" name="b" class="btn btn-default" value="Cancel"></p>
+          </div>
+        </div>
+</form>
+
+
+</div>
+</div>
 
 
 </div>
