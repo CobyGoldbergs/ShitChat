@@ -19,7 +19,7 @@
 	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
     </ul>
 	<span style="line-height:5px;">
-	<form class="navbar-form navbar-left" role="search">
+	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
         </div>
@@ -59,7 +59,14 @@
 <div class="col-lg-6">
 <div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px; height: 100%; overflow: scroll;">
 <center>
-<h2><span class="label label-success" style="float: left;">{{wall['up_votes']}}</span>{{wall['name']}} Name <button type="button" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;"><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button></h2>
+ <form method="POST"><h2><span class="label label-success" style="float: left;">{{wall['up_votes']}}</span>{{wall['name']}} Name 
+{% if upped == True %}
+<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;" disabled>
+{% endif %}
+{% if upped == False %}
+<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;">
+{% endif %}
+<span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button></h2></form>
 </center>
 
 {% for comment in wall['comments'] %}
