@@ -137,7 +137,7 @@ def wall_page(wall_id):
     x = int(wall_id)
     wall = db.walls.find_one( { 'wall_id' : x } )
     upped = False
-    if x in wall['walls_upped']:
+    if x in session['walls_upped']:
         upped = True
     if request.method == "GET":
         return render_template("stall.html", wall=wall)
@@ -146,16 +146,14 @@ def wall_page(wall_id):
             return logout()
         if request.form["b"] == "Post":
             resp = add_comment(request.form, x, session, db)
-            wall = db.walls.find_one( { 'wall_id' : x } )
             if resp == "Comment field left blank":
-                return render_template("stall.html", wall=wall)
+                return redirect(url_for('wall_page', wall_id=wall_id))
             else:
-                return render_template("stall.html", wall=wall)
+                return redirect(url_for('wall_page', wall_id=wall_id))
         if request.form["b"] == "up_vote":
             new_ses = up_vote(x, session, db)
             session['walls_upped'] = new_ses
-            wall = db.walls.find_one( { 'wall_id' : x } )
-            return render_template("stall.html", wall=wall)
+            return redirect(url_for('wall_page', wall_id=wall_id))
         if request.form["b"] == "search":
             x = search_wall(request.form, db)
             return render_template("search_results.html", walls = x)
