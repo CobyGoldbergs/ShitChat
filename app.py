@@ -83,6 +83,22 @@ def login():
         elif request.form["b"] == "About":
             return redirect("about")
 
+@app.route("/about", methods=["GET", "POST"])
+def about():
+    if request.method == "GET":
+        users = db.users.find()
+        count = 0
+        for u in users:
+            if u['logged_in'] == True:
+                count += 1
+        return render_template("about.html", logged_in = count)
+    else:
+        if request.form["b"] == "Log In":
+            return redirect("login")
+        elif request.form["b"] == "Sign Up":
+            return redirect("register")
+    
+
 #home pages includes: list of trending stall walls, each of which is a link to the wall, list of private walls (also links), list of online friends, button to see inbox of messages
 #can later add random wall button
 #to access existing walls i thought it'd be a list of links?

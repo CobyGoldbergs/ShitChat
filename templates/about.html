@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html lang="en">
+
+
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <title>ShitChat</title>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+	<a class="navbar-brand" href="#"><strong>ShitChat</strong></a>
+	</div>
+  <div class="container">
+    <span style="line-height:5px;">
+          <form class="navbar-form navbar-right" method="POST">
+	<p class="navbar-text">Currently {{logged_in}} users Poopin</p>
+            <input type="submit" name="b" class="btn btn-info" value="Log In">
+	    <input type="submit" name="b" class="btn btn-success" value="Sign Up">
+          </form>
+	</span>
+  </div>
+</nav>
+</head>
+
+<body style="padding-top:70px; background-image:url('./static/TextureUseamlessUtileUfloorUbu.jpg');">
+<div class="container-fluid">
+<div class="col-lg-3"><p></p></div>
+
+<div class="col-lg-6">
+
+<div class="jumbotron" style="background-color: #0B3861;">
+       <center> <h2>About</h2></center><br>
+
+	<p>
+	What's Poopin'?<br>
+
+An experiment in excellence, by Coby Goldberg, Cooper Weaver, Kyler Chase, and Julian Kal, to connect the nearly 25 million people pooping at any given moment in this world.
+	</p>
+        
+    </div>
+
+</div>
+
+
+</div>
+</body>
+
+</html>
