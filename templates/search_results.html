@@ -2,12 +2,63 @@
 
 <html lang="en">
 
-{% for wall in walls %}
-<p> {{wall['name']}} : {{wall['description']}}
-<br>
-{{wall['tags']}}
-<a href=/wall/{{wall['wall_id']}}> {{wall['name']}} </a>
-{%endfor%}
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    
+    <title>ShitChat</title>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+	<a class="navbar-brand" href="#"><strong>ShitChat</strong></a>
+	</div>
+  <div class="container">
+    <ul class="nav navbar-nav">
+	<li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
+	<li><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
+    </ul>
+	<span style="line-height:5px;">
+	<form class="navbar-form navbar-left" role="search" method="POST">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+        </div>
+        <input type="submit" name="b" class="btn btn-success" value="search">
+	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
+      </form>
+	</span>
+    <span style="line-height:5px;">
+          <form class="navbar-form navbar-right" method="POST">
+	    <p class="navbar-text">Logged in as {{ session['username'] }}</p>
+            <input type="submit" name="b" class="btn btn-danger" value="Log Out">
+	    <input type="submit" name="b" class="btn btn-primary" value="Settings">
+          </form>
+	</span>
+  </div>
+</nav>
+</head>
+
+<body style="padding-top:70px">
+<div class="container-fluid">
+
+<div class="list-group">
+  {% for w in walls %}
+  <a href="/wall/{{w['wall_id']}}" class="list-group-item">
+    <span class="badge" style="background-color: #088A29;">{{w['up_votes']}}</span>
+    <h4 class="list-group-item-heading">{{w['name']}}</h4>
+    <p class="list-group-item-text">{{w['description']}}</p><br>
+    <p>Tags: {% for tag in w['tags'] %}
+      <span style="background-color: #0B3861;" class="label label-default">{{tag}}</span> 
+      {% endfor %}
+    </p>
+  </a>
+  {% endfor %}
+</div>
+
+
+
+</div>
+</body>
 
 
 
