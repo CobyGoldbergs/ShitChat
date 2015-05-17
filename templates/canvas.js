@@ -18,6 +18,7 @@ document.body.onmouseup = function() {
 }
 window.onload = function() {
     ctx.fillStyle ="rgba(0, 10, 25, 0)";
+    ctx.canvas.width = window.innerWidth - 100;
 };
 
 draw = function (e) { 
