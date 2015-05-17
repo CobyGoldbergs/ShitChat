@@ -156,7 +156,7 @@ def wall_page(wall_id):
     if x in session['walls_upped']:
         upped = True
     if request.method == "GET":
-        return render_template("stall.html", wall=wall)
+        return render_template("stall.html", wall=wall, upped=upped)
     else:
         if request.form["b"] == "Log Out":
             return logout()
