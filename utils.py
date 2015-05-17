@@ -183,3 +183,36 @@ def up_vote(wall_id, session, db):
 def update_wall(wall_id, update_dict, db):
     db.walls.update({'wall_id' : wall_id}, {'$set' : update_dict}, upsert=True)
     return True
+
+# update_dict must be in the form {field_to_update : new_val}
+def update_private_doodle(private_doodle_id, update_dict, db):
+    db.private_doodles.update({'private_doodle_id' : private_doodle_id}, {'$set' : update_dict}, upsert=True)
+    return True
+
+# creates a private doodle: {string:name, int:privateDoodleID, string:creator, list:whiteCoords, list:redCoords}
+def create_private_doodle(name, session, users, db):
+    private_doodle = {}
+    if len(name) == 0:
+        return "Name required"
+    else:
+        private_doodle['name'] = name
+        #repeated = db.walls.find_one( { 'name' : name } , { "_id" : False } )
+        #if repeated != None:
+            #return "Name taken"
+        global private_doodle_count #to access the global variable
+        private_doodle_count += 1
+        private_doodle['private_doodle_id'] = private_doodle_count
+        private_doodle['creator'] = session['email']
+        private_doodle['white_coords'] = [];
+        private_doodle['red_coords'] = [];
+        db.private_doodles.insert(private_doodle)
+
+        #ensures that the user has a list of ids of all walls which he/ she created
+        id_list = session['private_doodles']
+        id_list.append(wall['private_doodle_id'])
+
+        update_user(session['email'], {'private_doodles':id_list}, db)
+
+        print "Private Doodle" + name + " created"
+        return "Private Doodle" + name + " created"
+
