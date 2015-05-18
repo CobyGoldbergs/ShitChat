@@ -77,20 +77,27 @@ def update_user(email, update_dict, db):
 ##########################     WALLS        ##########################
 
 #creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, int:up_votes list:dict:comments{string:comment, string:user's name  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id, list:strings:tags}} 
-def create_wall(name, description, session, db):
+def create_wall(form, session, db):
     wall = {}
-    if len(name) == 0:
+    if len(form['name']) == 0:
         return "Name required"
     else:
-        wall['name'] = name
+        wall['name'] = form['name']
         #repeated = db.walls.find_one( { 'name' : name } , { "_id" : False } )
         #if repeated != None:
             #return "Name taken"
-        wall['description'] = description
+        wall['description'] = form['description']
         wall['wall_id'] = str(ctime()) + session['email']
         wall['comments'] = []
         wall['num_comments'] = 0
-        wall['tags'] = []
+        tags = []
+        count = 1
+        while count <= 6:
+            cur = form['tag{0}'.format(count)]
+            count += 1
+            if cur != '':
+                tags.append(cur)
+        wall['tags'] = tags
         wall['creator'] = session['email']
         wall['up_votes'] = 0
         db.walls.insert(wall)
@@ -100,8 +107,8 @@ def create_wall(name, description, session, db):
         id_list.append(wall['wall_id'])
         update_user(session['email'], {'public_walls':id_list}, db)
 
-        print "Wall" + name + "created"
-        return "Wall " + name + " created"
+        #print "Wall" + name + "created"
+        return "Wall " + form['name'] + " created"
 
 #adds a comment, must be given form with the comment, id of the current wall, session and db
 #if user is not yet liste as having that wall connected, adds the wall's id

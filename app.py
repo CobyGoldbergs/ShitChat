@@ -113,20 +113,15 @@ def home():
         print request.form['b']
         if request.form['b'] == "Inbox":
              return redirect("inbox")
-        if request.form['b'] == "Create Wall":
-            #there needs to be a way for the info to be inserted, with fields for wall name and description
-            res = create_wall(request.form['wall_name'], request.form['description'])
-            if res == "Name required":
-                flash(res)
-                return redirect('home')
-            else:
-                flash(res)
-                return redirect('home') #or maybe move them to the newly created wall page
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
         if request.form['b'] == "Log Out":
             return logout()
         if request.form['b'] == "search":
-            print 'hey'
             x = search_wall(request.form, db)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
             return render_template("search_results.html", walls = x)
 
 #simple inbox to see past conversations
@@ -139,14 +134,22 @@ def create_w():
     if request.method == "GET":
         return render_template("create.html")
     else:
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
         if request.form["b"] == "Start Poopin'":
-            res = create_wall(request.form["name"], request.form["description"],session, db)
+            res = create_wall(request.form, session, db)
             success = "Wall " + request.form["name"] + " created"
             if res == success:
                 print "yay!"
                 return redirect('home')
             else:
                 return redirect('create_wall')
+        if request.form['b'] == "search":
+            x = search_wall(request.form, db)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
+            return render_template("search_results.html", walls = x)
 
 @app.route("/wall/<wall_id>", methods=["GET", "POST"])
 def wall_page(wall_id):
@@ -159,6 +162,8 @@ def wall_page(wall_id):
     else:
         if request.form["b"] == "Log Out":
             return logout()
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
         if request.form["b"] == "Post":
             resp = add_comment(request.form, wall_id, session, db)
             if resp == "Comment field left blank":
@@ -169,9 +174,12 @@ def wall_page(wall_id):
             new_ses = up_vote(wall_id, session, db)
             session['walls_upped'] = new_ses
             return redirect(url_for('wall_page', wall_id=wall_id))
-        if request.form["b"] == "search":
+        if request.form['b'] == "search":
             x = search_wall(request.form, db)
-            return render_template("search_results.html", walls = wall_id)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
+            return render_template("search_results.html", walls = x)
 
 @app.route("/canvas", methods=["GET", "POST"])
 def canvas():
