@@ -30,7 +30,7 @@
 	</span>
     <span style="line-height:5px;">
           <form class="navbar-form navbar-right" method="POST">
-	    <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
+	    <p class="navbar-text">Logged in as {{ session['first_name'] }} {{ session['last_name']}}</p>
             <input type="submit" name="b" class="btn btn-danger" value="Log Out">
           </form>
 	</span>
