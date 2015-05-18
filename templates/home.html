@@ -22,9 +22,10 @@
 	<span style="line-height:5px;">
 	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+          <input type="text" class="form-control" placeholder="Search Wall or User" name="name" style="width:150px;">
         </div>
-        <input type="submit" name="b" class="btn btn-success" value="search">
+        <input type="submit" name="b" class="btn btn-success" value="Search Wall">
+	<input type="submit" name="b" class="btn btn-success" value="Search User">
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
       </form>
 	</span>
@@ -104,6 +105,9 @@
 		<div class="jumbotron jumbotron" style="height:1000px; background-color: #0B3861;">
 		<div class="container-fixed-right">
 		<h2>Instant Messaging</h2>
+		{% for friend in session['friends'] %}
+		{{friend['first_name']}} {{friend['last_name']}}; Logged In: {{friend['logged_in']}}<br>
+		{% endfor %}
 		</div>
 		</div>
 	</div>

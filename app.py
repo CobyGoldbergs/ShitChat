@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall, update_wall, up_vote
+from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall, update_wall, up_vote, add_friend
 from functools import wraps
 import pymongo
 import operator
@@ -15,7 +15,7 @@ db = conn['users']
 #for w in walls:
  #   print w
 
-#db.walls.remove()
+db.users.remove()
 
 def auth(page):
     def decorate(f):
@@ -117,12 +117,19 @@ def home():
             return redirect("create_wall")
         if request.form['b'] == "Log Out":
             return logout()
-        if request.form['b'] == "search":
+        if request.form['b'] == "Search Wall":
             x = search_wall(request.form, db)
             if x == []:
                 flash('invalid search')
                 return redirect('home')
             return render_template("search_results.html", walls = x)
+        if request.form['b'] == "Search User":
+            add_friend(request.form, session, db)
+            user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
+            session['friends'] = user['friends']
+            return redirect('home')
+            
+            
 
 #simple inbox to see past conversations
 #@app.route("/inbox", methods=["GET", "POST"])

@@ -22,7 +22,7 @@ def register_user(form, db):
 
     user['private_walls'] = [] #will be list of ids
     user['public_walls'] = [] #ditto
-    user['friends'] = [] #list of other users ids
+    user['friends'] = [] #list of other users emails
     user['conversations'] = {}
     user['count_unread'] = 0 #number of total unread messages
 
@@ -69,6 +69,18 @@ def authenticate(email, password, db):
     else:
         return None
         
+#add a friend to a user
+def add_friend(form, session, db):
+    email = str(form['name'])
+    user = db.users.find_one( { 'email' : email } , { "_id" : False } )
+    friends = session['friends']
+    for friend in friends:
+        if friend['email'] == user['email']:
+            return False
+    friends.append(user)
+    update_user(session['email'], {'friends': friends}, db)
+    return True
+
 # update_dict must be in the form {field_to_update : new_val}
 def update_user(email, update_dict, db):
     db.users.update({'email' : email}, {'$set' : update_dict}, upsert=True)
