@@ -12,10 +12,6 @@ def register_user(form, db):
     user['first_name'] = form['first_name']
     user['last_name'] = form['last_name']
     user['email'] = form['email'] #to be used for log in, since name's arent necessarily unique
-
-    global user_count #to access the global variable
-    user_count += 1
-    user['user_id'] = user_count #to be used for pointing to other users (classier than email)
         
     #security
     pword = form['password']
