@@ -173,6 +173,12 @@ def wall_page(wall_id):
             x = search_wall(request.form, db)
             return render_template("search_results.html", walls = wall_id)
 
+@app.route("/canvas", methods=["GET", "POST"])
+def canvas():
+    if request.method == "GET":
+        return render_template("canvas.html")
+
+
 #basic log out method
 def logout():
     session.pop('logged_in', None)
