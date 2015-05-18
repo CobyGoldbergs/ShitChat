@@ -150,10 +150,9 @@ def create_w():
 
 @app.route("/wall/<wall_id>", methods=["GET", "POST"])
 def wall_page(wall_id):
-    x = int(wall_id)
-    wall = db.walls.find_one( { 'wall_id' : x } )
+    wall = db.walls.find_one( { 'wall_id' : wall_id } )
     upped = False
-    if x in session['walls_upped']:
+    if wall_id in session['walls_upped']:
         upped = True
     if request.method == "GET":
         return render_template("stall.html", wall=wall, upped=upped)
@@ -161,18 +160,18 @@ def wall_page(wall_id):
         if request.form["b"] == "Log Out":
             return logout()
         if request.form["b"] == "Post":
-            resp = add_comment(request.form, x, session, db)
+            resp = add_comment(request.form, wall_id, session, db)
             if resp == "Comment field left blank":
                 return redirect(url_for('wall_page', wall_id=wall_id))
             else:
                 return redirect(url_for('wall_page', wall_id=wall_id))
         if request.form["b"] == "up_vote":
-            new_ses = up_vote(x, session, db)
+            new_ses = up_vote(wall_id, session, db)
             session['walls_upped'] = new_ses
             return redirect(url_for('wall_page', wall_id=wall_id))
         if request.form["b"] == "search":
             x = search_wall(request.form, db)
-            return render_template("search_results.html", walls = x)
+            return render_template("search_results.html", walls = wall_id)
 
 #basic log out method
 def logout():
@@ -186,6 +185,6 @@ def logout():
     return redirect('home')
 
 if __name__ == "__main__":
-	app.debug = True
-	app.secret_key = "shhhhhh"
-	app.run()
+    app.debug = True
+    app.secret_key = "shhhhhh"
+    app.run()
