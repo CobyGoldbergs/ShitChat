@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> 
+	<head>
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="panel-body">
+			<ul class="list-group">
+				<li class="list-group-item">
+					<h2> Name of Doodle </h2>
+					<h4> Contributors </h4>
+				</li>
+				<li class="list-group-item">
+					<div style:"border:3px solid" id = "edit" width="100">
+						Click here to edit
+					</div>
+				</li>
+				<li class="list-group-item">
+					<center><canvas style="border:3px solid" id="c" width="600" height="500"></canvas></center>
+				</li>
+				<li class="list-group-item">
+					<div class="well well-sm" id="tools">
+						<img 
+							src='https://lh4.ggpht.com/lcydxe9aTLvDT5flQ4PldQQswbnrC0tR4IIpTQjPr5PI2fSSvHhlc3ENf2B6DyGZOIY=w300' 
+							id='eraser' width='100'>
+						<img 
+					    	src="http://www.wpclipart.com/education/supplies/markers/text_marker_drawing_orange.svg"
+					     	id="marker" width="100">
+					    <img 
+					    	src='http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/512px-Circle-green.svg.png' width='50' 
+					    	id='green' style="visibility:hidden"> 
+                        <img 
+                        	src ='http://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Circle-red.svg/512px-Circle-red.svg.png' width='50' 
+                        	id='red' style="visibility:hidden">
+                       	<img 
+                       		src ='http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Circle-blue.svg/2000px-Circle-blue.svg.png' width='50' 
+                       		id='blue' style="visibility:hidden">
+					  	  
+					</div>
+				</li>
+			</ul>    
+		</div>
+		<img hidden src="#" id="saved">
+	    <script src="canvas.js"></script>
+	</body> 
+</html>
