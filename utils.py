@@ -100,6 +100,8 @@ def create_wall(form, session, db):
         wall['tags'] = tags
         wall['creator'] = session['email']
         wall['up_votes'] = 0
+        wall['contributers'] = []
+        wall['num_contributers'] = 0
         db.walls.insert(wall)
 
         #ensures that the user has a list of ids of all walls which he/ she created
@@ -142,7 +144,15 @@ def add_comment(form, current_wall, session, db):
         new_comment.append(com)
     num_comments = int(wall['num_comments']) + 1
 
-    update_wall(current_wall, {'comments': new_comment, 'num_comments': num_comments}, db)
+    contributers = wall['contributers']
+    num_contributers = wall['num_contributers']
+    if session['email'] in contributers:
+        pass
+    else:
+        contributers.append(session['email'])
+        num_contributers += 1
+
+    update_wall(current_wall, {'comments': new_comment, 'num_comments': num_comments, 'contributers': contributers, 'num_contributers': num_contributers}, db)
 
     return "Check"
     

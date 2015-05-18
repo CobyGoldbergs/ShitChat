@@ -46,10 +46,9 @@
 <div class="col-lg-3">
 <div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px; height: 100%; overflow: scroll;">
 <center>
-<h3>Description</h3>
 </center>
-<h4>{{wall['description']}}</h4>
-
+<h2>{{wall['description']}}</h2>
+<h5>{{wall['num_contributers']}} Contributers </h5>
 
 </div>
 
@@ -58,7 +57,7 @@
 <div class="col-lg-6">
 <div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px; height: 100%; overflow: scroll;">
 <center>
- <form method="POST"><h2><span class="label label-success" style="float: left;">{{wall['up_votes']}}</span>{{wall['name']}} Name 
+ <form method="POST"><h2><span class="label label-success" style="float: left;">{{wall['up_votes']}}</span>{{wall['name']}} 
 {% if upped == False %}
 <button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;"><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button>
 {% endif %}</h2></form>
@@ -82,7 +81,7 @@
 <div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-left: 50px; margin-right: 0px height: 100%; overflow: scroll;">
 <center><h3>Rules:<h3></center>
 <h5>Some shit over here to even it out</h5>
-<h5>Contributers: 1234532</h5>
+<h5>{{wall['num_contributers']}} Contributers</h5>
 <h5>Created date/date</h5>
 <h5>Maybe just a bunch of rules? Description can be for what its for, rules are for what its not for? I'm also writing all this to see what a paragraph here looks like</h5>
 
