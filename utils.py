@@ -3,7 +3,6 @@ from time import ctime
 
 ##########################     LOGIN/ REGISTER        ##########################
 
-user_count = 0
 #Creates new user in database.
 #user: {string:first_name, string:last_name, string:email int:user_id, int:password, int:salt, list:int:private_walls, list:int:public_walls, list:int:friends, dict:conversations, int:count_unread, boolean:logged_in}
 #conversations can be structured :  {person_talked_to: {int:unread_count, messages:[{'sender':who_sent_this_message, string:'message_text', string:'time':'12:04:50', 'date':Jan-20-2015}, more messages....], more people:{}....}
@@ -81,8 +80,6 @@ def update_user(email, update_dict, db):
 
 ##########################     WALLS        ##########################
 
-wall_count = 0
-
 #creates a dict wall: {string:name, string:description, int:wall_id, int:num_comments, int:up_votes list:dict:comments{string:comment, string:user's name  string:'time':'12:04:50', 'date':Jan-20-2015, int:up_votes, int:comment_id, list:strings:tags}} 
 def create_wall(name, description, session, db):
     wall = {}
@@ -94,9 +91,7 @@ def create_wall(name, description, session, db):
         #if repeated != None:
             #return "Name taken"
         wall['description'] = description
-        global wall_count #to access the global variable
-        wall_count += 1
-        wall['wall_id'] = wall_count
+        wall['wall_id'] = str(ctime()) + session['email']
         wall['comments'] = []
         wall['num_comments'] = 0
         wall['tags'] = []
