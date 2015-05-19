@@ -15,7 +15,7 @@ db = conn['users']
 #for w in walls:
  #   print w
 
-db.users.remove()
+#db.users.remove()
 
 def auth(page):
     def decorate(f):
@@ -147,7 +147,6 @@ def create_w():
             res = create_wall(request.form, session, db)
             success = "Wall " + request.form["name"] + " created"
             if res == success:
-                print "yay!"
                 return redirect('home')
             else:
                 return redirect('create_wall')

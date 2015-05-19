@@ -73,6 +73,9 @@ def authenticate(email, password, db):
 def add_friend(form, session, db):
     email = str(form['name'])
     user = db.users.find_one( { 'email' : email } , { "_id" : False } )
+    print user
+    if user == None:
+        return False
     friends = session['friends']
     for friend in friends:
         if friend['email'] == user['email']:
@@ -102,6 +105,7 @@ def create_wall(form, session, db):
         wall['wall_id'] = str(ctime()) + session['email']
         wall['comments'] = []
         wall['num_comments'] = 0
+        wall['type'] = form['type']
         tags = []
         count = 1
         while count <= 6:
