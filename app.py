@@ -57,12 +57,12 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    users = db.users.find()
+    count = 0
+    for u in users:
+        if u['logged_in'] == True:
+            count += 1
     if request.method == "GET":
-        users = db.users.find()
-        count = 0
-        for u in users:
-            if u['logged_in'] == True:
-                count += 1
         return render_template("login.html", logged_in = count)
     else:
         if request.form["b"] == "Start Poopin'":
@@ -71,11 +71,9 @@ def login():
                 # Loops over dictionary, creates new session element for each key
                 for key in user.keys():
                     session[key] = user[key]
-                print "Welcome, " + session['first_name']
                 return redirect("home")
             else:
-                flash("Your username or password is incorrect")
-                return redirect('login')
+                return render_template("login.html", message = "Username or password is incorrect", logged_in = count)
         elif request.form["b"] == "Cancel":
             return redirect("login")
         elif request.form["b"] == "Sign Up":
