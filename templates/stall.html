@@ -60,7 +60,11 @@
  <form method="POST"><h2><span class="label label-success" style="float: left;">{{wall['up_votes']}}</span>{{wall['name']}} 
 {% if upped == False %}
 <button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;"><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button>
-{% endif %}</h2></form>
+{% endif %}
+{% if upped == True %}
+<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;" disabled><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button>
+{% endif %}
+</h2></form>
 </center>
 
 {% for comment in wall['comments'] %}
