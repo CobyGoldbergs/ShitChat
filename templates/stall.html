@@ -44,10 +44,11 @@
 <div class="container-fluid">
 <div class="row">
 <div class="col-lg-3">
-<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-top: 0px; height: 100%; overflow: scroll;">
+<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-right: 20px; height: 100%; overflow: scroll;">
 <center>
+<h2>Description</h2>
 </center>
-<h2>{{wall['description']}}</h2>
+<h4>{{wall['description']}}</h4>
 <h5>{{wall['num_contributers']}} Contributers </h5>
 
 </div>
@@ -62,13 +63,13 @@
 <button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;"><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button>
 {% endif %}
 {% if upped == True %}
-<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;" disabled><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button>
+<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;" disabled><span class="glyphicon glyphicon-arrow-up" style="color: #2212FF;"></span><span class="glyphicon glyphicon-thumbs-up" style="color: #2212FF;"></span></button>
 {% endif %}
 </h2></form>
 </center>
 
 {% for comment in wall['comments'] %}
-<p style="font-family: 'Comic Sans MS', cursive, sans-serif; color: #{{comment['color']}};">{{comment['comment']}} by {{comment['user_name']}} at {{comment['time']}} on {{comment['date']}}</p>
+<span title="{{comment['user_name']}} wuz here at {{comment['time']}} on {{comment['date']}}" style="color: #{{comment['color']}};"><p style="font-family: 'Comic Sans MS', cursive, sans-serif; color: #{{comment['color']}};">{{comment['comment']}}</p></span>
 {% endfor %}
 
 <form method="POST">
