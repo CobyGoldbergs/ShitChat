@@ -15,8 +15,8 @@
   <div class="container">
     <ul class="nav navbar-nav">
 	<li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
-	<li class="active"><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
-	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
+	<li><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+	<li class="active"><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
     </ul>
 	<span style="line-height:5px;">
 	<form class="navbar-form navbar-left" role="search">
@@ -38,42 +38,30 @@
 </nav>
 </head>
 
-
-
 <body style="padding-top:70px">
 <div class="container-fluid">
+
+<h1>Public Bathroom</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 </div>
-
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    
-    <form method="POST">
-    {% if conversation == 0 %}
-    To:<input name="usr" id="usr" type="text" value="example@email.com">
-    {% else %}
-    To: {{rec}}
-    {% endif %}
-      <div style="overflow:scroll; height:200px; width: 200px; border:1px solid black; scrollTop:scrollHeight" id="block">
-          <p>
-          {% if conversation != 0 %}
-          {% for message in conversation %}
-          
-          {{message[0]}}: {{message[2]}} <br>
-          
-          {% endfor %}
-          {% endif %}
-          </p>
-      </div>
-
-
-
-      <input name="textbox1" id="textbox1" type="text">
-      <input name="b" onclick="send(document.getElementById('textbox1').value)" type="submit" value="send">
-    </form>
-
-    <script src="../message.js"></script>
-        </body>
+</body>
 </html>
-

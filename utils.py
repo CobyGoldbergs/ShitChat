@@ -35,15 +35,17 @@ def register_user(form, db):
     
 
 #ensures a valid username and password, when being registered
-def validate(first_name, last_name, email, password, db):
-    email_new = db.users.find_one( { 'email' : email } , { "_id" : False } )
+def validate(form, db):
+    email_new = db.users.find_one( { 'email' : form['email'] } , { "_id" : False } )
     if email_new == None:
-        if len(first_name) == 0:
+        if len(form['first_name']) == 0:
             return 'No first name entered'
-        if len(last_name) == 0:
+        if len(form['last_name']) == 0:
             return 'No last name entered'
-        elif len(password) > 5:
+        elif len(form['password']) < 5:
             return 'Invalid password. Must be at least five characters.'
+        elif form['password'] != form['password_confirm']:
+            return "Password and confirm don't match"
         else:
             return 'Valid'
     else:
@@ -147,3 +149,77 @@ def search_wall(form, db):
 def update_wall(name, update_dict, db):
     db.wall.update({'name' : name}, {'$set' : update_dict}, upsert=True)
     return True
+
+
+
+def startConversation(email, recEmail, db):
+    user = db.users.find_one( { 'email' : email } , { "_id" : False })
+    rec = db.users.find_one( { 'email' : recEmail } , { "_id" : False })
+    
+    ##Error check for bad email.
+    
+    print rec
+    
+    tempUser = user['conversations']
+    tempRec = rec['conversations']
+
+    tempUser[recEmail] = [0, []]
+    tempRec[email] = [0, []]
+
+    print tempRec
+
+    update_user(email, {'conversations' : tempUser}, db)
+    update_user(recEmail, {'conversations' : tempRec}, db)# <------ this is causing all your problems
+
+    print "\n", db.users.find_one({'email' : "julian"}, {"_id" : False })
+    print "\n", db.users.find_one({'email' : "cooperweaver@mac.com"}, {"_id" : False })
+
+
+
+def sendMessage(email, recEmail, message, db):
+    user = db.users.find_one( { 'email' : email } , { "_id" : False } )
+    rec = db.users.find_one( { 'email' : recEmail } , { "_id" : False } )
+    
+   
+    tempUser = user['conversations']
+    tempRec = rec['conversations']
+
+#print tempUser
+
+    messages = tempUser[recEmail][1]
+    
+    time_total = str(ctime())
+    t = time_total[4:10] + ", " + time_total[20:25]
+    t += time_total[11:19]
+
+    newMessage = []
+
+    newMessage.append(user['first_name'])
+    
+    newMessage.append(t)
+    
+    newMessage.append(message)
+
+
+    messages.append(newMessage)
+
+    tempUser[recEmail] = [0, messages]
+    tempRec[email] = [1, messages]
+    
+
+    update_user(email, {'conversations' : tempUser}, db)
+    update_user(recEmail, {'conversations' : tempRec, 'count_unread' : rec['count_unread'] + 1}, db)
+
+    print db.users.find_one({'email' : "cooperweaver@mac.com"}, {"_id" : False })
+    print db.users.find_one({'email' : "julian"}, {"_id" : False })
+
+    return tempUser
+
+
+
+
+
+
+
+
+

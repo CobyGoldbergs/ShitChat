@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html lang="en">
+
+
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <title>ShitChat</title>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+	<a class="navbar-brand" href="#"><strong>ShitChat</strong></a>
+	</div>
+  <div class="container">
+    <span style="line-height:5px;">
+          <form class="navbar-form navbar-right" method="POST">
+	<p class="navbar-text">Currently __ users Poopin</p>
+            <input type="submit" name="b" class="btn btn-info" value="Sign Up">
+	    <input type="submit" name="b" class="btn btn-primary" value="About">
+          </form>
+	</span>
+  </div>
+</nav>
+</head>
+
+<body style="padding-top:70px; background-image:url('./static/TextureUseamlessUtileUfloorUbu.jpg');">
+<div class="container-fluid">
+
+<center><div class="jumbotron" style="max-width:730px; background-color: #0B3861;">
+        <h2>Log In</h2><br>
+        <form role="form" class="form-horizontal" method="POST">
+          <div class="form-group">
+        	   <p><input type="text" class="form-control" name="email" placeholder="Email"></p>
+        	   <p><input type="password" class="form-control" name="password" placeholder="Password"></p>
+               {% if message is defined %}
+               <div class="alert alert-danger " role="alert">
+                   {{message}}
+               </div>
+               {% endif %}
+        	   <p><input type="submit" name="b" class="btn btn-success" value="Start Poopin'">
+  	         <input type="submit" name="b" class="btn btn-default" value="Cancel"></p>
+          </div>
+        </div>
+        </form>
+    </div>

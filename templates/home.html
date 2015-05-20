@@ -1,79 +1,124 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 
 <html lang="en">
-
-
-  <head>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <title>ShitChat</title>
-
-<nav class="navbar navbar-default navbar-fixed-top">
-	<div class="navbar-header">
-	<a class="navbar-brand" href="#">ShitChat</a>
-	</div>
-  <div class="container">
-    <ul class="nav navbar-nav">
-	<li class="active"><a href="/home">Home <span class="sr-only">(current)</span></a></li>
-	<li><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
-	<li><a href="#">Link <span class="sr-only">(current)</span></a></li>
-    </ul>
-	<span style="line-height:5px;">
-	<form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:300px;">
+    
+    
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+                
+                <title>ShitChat</title>
+                
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="navbar-header">
+                        <strong><a class="navbar-brand" href="#">ShitChat</a></strong>
+                    </div>
+                    <div class="container">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="/home">Home <span class="sr-only">(current)</span></a></li>
+                            <li><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+                            <li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
+                        </ul>
+                        <span style="line-height:5px;">
+                            <form class="navbar-form navbar-left" role="search">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+                                        </div>
+                                <input type="submit" name="b" class="btn btn-success" value="search">
+                                    <input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
+                                        </form>
+                        </span>
+                        <span style="line-height:5px;">
+                            <form class="navbar-form navbar-right" method="POST">
+                                <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
+                                <input type="submit" name="b" class="btn btn-danger" value="Log Out">
+                                    <input type="submit" name="b" class="btn btn-primary" value="Settings">
+                                        </form>
+                        </span>
+                    </div>
+                </nav>
+    </head>
+    
+    <body style="padding-top:70px">
+        <div class="container-fluid">
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1>Trending Stall Walls</h1>
+                    
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">List group item heading</h4>
+                            <p class="list-group-item-text">...</p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <span class="badge" style="background-color: #088A29;">1493</span>
+                            <h4 class="list-group-item-heading">Example Stall Wall That I played around with</h4>
+                            <p class="list-group-item-text">On this stall wall, users do nothing but draw penises</p><br>
+                            <p>Tags: <span style="background-color: #0B3861;" class="label label-default">Drawing</span> <span class="label label-default" style="background-color: #0B3861;">Penises</span></p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">List group item heading</h4>
+                            <p class="list-group-item-text">...</p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Example Stall Wall</h4>
+                            <p class="list-group-item-text">On this stall wall, users do nothing but draw penises</p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Example Stall Wall</h4>
+                            <p class="list-group-item-text">On this stall wall, users do nothing but draw penises</p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Example Stall Wall</h4>
+                            <p class="list-group-item-text">On this stall wall, users do nothing but draw penises</p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Example Stall Wall</h4>
+                            <p class="list-group-item-text">On this stall wall, users do nothing but draw penises</p>
+                        </a>
+                    </div>
+                    
+                </div>
+                
+                
+                
+                
+                <div class="col-lg-4">
+                    <div class="jumbotron jumbotron" style="height:1000px; background-color: #0B3861;">
+                        <div class="container-fixed-right">
+                            <h2>Instant Messaging</h2>
+                            
+                            
+                            <div style="overflow:scroll; height:200px; width: 200px; border:1px solid black;" id="block">
+                            </div>
+                            <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+                            <input name="textbox1" id="textbox1" type="text">
+                            <input name="send" onclick="send(document.getElementById('textbox1').value)" type="button" value="send">
+                                    
+                                    
+                            <script src="../static/message.js"></script>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
-        <input type="submit" name="b" class="btn btn-success" value="search">
-	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
-      </form>
-	</span>
-    <span style="line-height:5px;">
-          <form class="navbar-form navbar-right" method="POST">
-	    <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
-            <input type="submit" name="b" class="btn btn-danger" value="Log Out">
-	    <input type="submit" name="b" class="btn btn-primary" value="Settings">
-          </form>
-	</span>
-  </div>
-</nav>
-
-<body style="padding-top:70px">
-<div class="container-fluid">
-  
-
-<div class="col-lg-8">
-<h1>Stall Wall Stuff</h1>
-
-
-</div>
-
-
-
-<div class="row">
-        <div class="col-lg-4">
-		<div class="jumbotron jumbotron" style="height:1000px; background-color: #0B3861;">
-		<div class="container-fixed-right">
-		<h2>Instant Messaging</h2>
-		</div>
-		</div>
-	    
-	</div>
-</div>
-
-</div>
-
-
-
-
-</body>
-
-
-<div class="verticalLine" style="border-left: thick solid #ff0000; height:1000px;">
-
-
-
-
-
-
-
+        
+        
+        
+        
+    </body>
+    
+    <!
+    <div class="verticalLine" style="border-left: thick solid #ff0000; height:1000px;">
+    
+    
+    
+    
+    
+    
+    
 </html>
