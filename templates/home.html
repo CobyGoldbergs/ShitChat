@@ -104,9 +104,14 @@
         <div class="col-lg-4">
 		<div class="jumbotron jumbotron" style="height:1000px; background-color: #0B3861;">
 		<div class="container-fixed-right">
-		<h2>Instant Messaging</h2>
+		<h2>Ya Boys</h2>
 		{% for friend in session['friends'] %}
-		{{friend['first_name']}} {{friend['last_name']}}; Logged In: {{friend['logged_in']}}<br>
+		{% if friend['logged_in'] %}
+		<button type="submit" name="b" class="btn btn-success btn-md"><span class="glyphicon glyphicon-edit"></span></button>
+		{% else %}
+		<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
+		{% endif %}
+		{{friend['first_name']}} {{friend['last_name']}}<br>
 		{% endfor %}
 		</div>
 		</div>
