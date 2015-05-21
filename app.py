@@ -106,11 +106,6 @@ def about():
 def home():
     if request.method == "GET":
         walls = db.walls.find().sort('up_votes', pymongo.DESCENDING)
-        wa = []
-        t = 
-        for w in walls:
-            
-
         return render_template("home.html", walls=walls)
     else:
         print request.form['b']
