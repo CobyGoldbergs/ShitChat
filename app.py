@@ -10,7 +10,6 @@ conn = Connection()
 db = conn['users']
 
 
-
 def auth(page):
     def decorate(f):
         @wraps(f)
@@ -77,6 +76,11 @@ def login():
 @app.route("/home", methods=["GET", "POST"])
 @auth("/home") #To be readded once login is there
 def home():
+    test = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+    print test
+    update_user(session['email'], {'conversations' : {'Niggah': 'Hey'}}, db)
+    test = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+    print test
     if request.method == "GET":
         return render_template("home.html")
     else:
@@ -127,18 +131,23 @@ def messages(usr = None):
     else:
         print "Here"
         if request.form['b'] == "send":
-            print "here2"
-            if usr == None:
-                print "setting user"
-                usr = request.form['usr']
-                print "starting conversation"
-                startConversation(session['email'], usr, db)
-            print "collecting message"
+            #print "here2"
+            #if usr == None:
+                #print "setting user"
+            usr = request.form['usr']
+                #print "starting conversation"
+                #print "Recep: " + usr
+            x = startConversation(session['email'], usr, db)
+            update_user(session['email'], {'conversations' : x['user']}, db)
+            update_user(usr, {'conversations' : x['rec']}, db)
+            #print "collecting message"
+            l = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+            print l
             message = request.form['textbox1']
-            print "sending message"
+            #print "sending message"
             session['conversations'] = sendMessage(session['email'], usr, message, db)
-    conversation = session['conversations'][usr][1]
-    return redirect('messages/'+usr)
+            conversation = session['conversations'][usr][1]
+            return redirect('messages/'+usr)
 
 
 
