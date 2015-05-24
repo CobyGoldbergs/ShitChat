@@ -97,7 +97,8 @@ def create_wall(form, session, db):
     if len(form['name']) == 0:
         return "Name required"
     else:
-        wall['name'] = form['name']
+        wall['name'] = form['name'][0].upper() + form['name'][1:]
+            
         #repeated = db.walls.find_one( { 'name' : name } , { "_id" : False } )
         #if repeated != None:
             #return "Name taken"
@@ -200,7 +201,6 @@ def up_vote(wall_id, session, db):
     
     #so the actual copy of session can be updated
     return session['walls_upped']
-
 
 
 # update_dict must be in the form {field_to_update : new_val}

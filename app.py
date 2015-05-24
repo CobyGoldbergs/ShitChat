@@ -4,6 +4,7 @@ from utils import authenticate, create_wall, add_comment, validate, register_use
 from functools import wraps
 import pymongo
 import operator
+import string
 
 app = Flask(__name__)
 
@@ -15,7 +16,7 @@ db = conn['users']
 #for w in walls:
  #   print w
 
-#db.users.remove()
+#db.walls.remove()
 
 def auth(page):
     def decorate(f):
@@ -184,6 +185,34 @@ def wall_page(wall_id):
                 flash('invalid search')
                 return redirect('home')
             return render_template("search_results.html", walls = x)
+
+@app.route("/walls", methods=["GET", "POST"])
+def walls():
+    if request.method == "GET":
+        walls = db.walls.find().sort('name', pymongo.ASCENDING)
+        wall_dict = {}
+        counter = 0
+        wall_dict[string.uppercase[counter]] = []
+        l = []
+        for w in walls:
+            #create lists of all walls with each letter first
+            print w['name'][0]
+            if w['name'][0] == string.uppercase[counter]:
+                l.append(w)
+            else:
+                while w['name'][0] != string.uppercase[counter]:
+                    wall_dict[string.uppercase[counter]] = l
+                    counter += 1
+                    if counter > 26:
+                        break
+                    wall_dict[string.uppercase[counter]] = []
+                    l = []
+                l.append(w)
+        wall_dict[string.uppercase[counter]] = l
+        for key in wall_dict:
+            print key
+            print wall_dict[key]
+        return render_template("walls.html", walls=wall_dict)
 
 @app.route("/canvas", methods=["GET", "POST"])
 def canvas():
