@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # mongo 
 # conn = Connection()
-db = MongoClient['users']
+db = MongoClient()['users']
 
 
 #walls = db.walls.find()
