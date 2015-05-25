@@ -305,4 +305,4 @@ def logout():
 if __name__ == "__main__":
     app.debug = True
     app.secret_key = "shhhhhh"
-    app.run()
+    app.run(port=8000)
