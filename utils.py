@@ -22,8 +22,9 @@ def register_user(form, db):
 
     user['private_walls'] = [] #will be list of ids
     user['public_walls'] = [] #ditto
-    user['friends'] = [] #list of other users emails
-    user['conversations'] = {}
+
+    user['friends'] = [] #list of other users ids
+
     user['count_unread'] = 0 #number of total unread messages
 
     user['walls_upped'] = [] #list of ids of walls already upvoted
@@ -239,4 +240,62 @@ def create_private_doodle(name, session, users, db):
 
         print "Private Doodle" + name + " created"
         return "Private Doodle" + name + " created"
+
+
+def update_message(tag, update_dict, db):
+    db.messages.update({'tag' : tag}, {'$set' : update_dict}, upsert=True)
+    return True
+
+
+
+def startConversation(tag, db):
+    tag.sort()
+         
+    if db.messages.find_one({'tag' : tag}, {"_id" : False}) != None:
+        return True
+    
+    
+    newCon = {}
+
+    newCon['tag'] = tag
+
+    newCon['messages'] = []
+
+    db.messages.insert(newCon)
+
+
+
+
+
+def sendMessage(email, tag, message, db):
+    print "sending message..."
+    user = db.users.find_one({'email' : email}, {"_id" : False })
+
+    
+    time_total = str(ctime())
+    t = time_total[4:10] + ", " + time_total[20:25]
+    t += " " + time_total[11:19]
+
+    newMessage = []
+
+    newMessage.append(user['first_name'])
+    
+    newMessage.append(t)
+    
+    newMessage.append(message)
+    
+    print "finding Conversation ", tag
+    
+    con = db.messages.find_one({'tag' : tag}, {"_id" : False})
+
+    print "\n", con
+
+    messages = con['messages']
+
+    messages.append(newMessage)
+
+    update_message(tag, {'messages' : messages}, db)
+
+
+
 

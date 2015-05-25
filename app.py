@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
 from pymongo import Connection
-from utils import authenticate, create_wall, add_comment, validate, register_user, update_user, search_wall, update_wall, up_vote, add_friend
+from utils import *
 from functools import wraps
 import pymongo
 import operator
@@ -12,11 +12,17 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
+
 #walls = db.walls.find()
 #for w in walls:
  #   print w
 
 #db.walls.remove()
+
+
+#db.messages.remove()
+
+
 
 def auth(page):
     def decorate(f):
@@ -105,6 +111,11 @@ def about():
 @app.route("/home", methods=["GET", "POST"])
 @auth("/home") #To be readded once login is there
 def home():
+    test = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+    print test
+    update_user(session['email'], {'conversations' : {'Niggah': 'Hey'}}, db)
+    test = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+    print test
     if request.method == "GET":
         walls = db.walls.find().sort('up_votes', pymongo.DESCENDING)
         return render_template("home.html", walls=walls)
@@ -131,9 +142,68 @@ def home():
             
 
 #simple inbox to see past conversations
-#@app.route("/inbox", methods=["GET", "POST"])
-#@auth("/inbox")
-#def inbox():
+@app.route("/inbox", methods=["GET", "POST"])
+@auth("/inbox")
+def inbox():
+    if request.method == "GET":
+        messages = db.messages.find()
+        conversations = []
+        for conversation in messages:
+            for user in conversation['tag']:
+                if user == session['email']:
+                    conversations.append(conversation)
+        return render_template("inbox.html", conversations = conversations, sender = session['email'])
+    else:
+        if request.form['b'] == "New Message":
+            return redirect('messages')
+
+
+@app.route("/messages", methods=["GET", "POST"])
+@app.route("/messages/<usr>", methods=["GET","POST"])
+@auth("/messages/<usr>")
+def messages(usr = None):
+    if request.method == "GET":
+        if usr == None:
+            messages = db.messages.find()
+            for message in messages:
+                print message
+            return render_template("messages.html", conversation=0)
+        else:
+            usr = usr.split("_")
+            usr.sort()
+            print usr
+            while "" in usr:
+                usr.remove("")
+            print "\n", usr, "\n"
+            conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+            print conversation
+            if conversation == None:
+                startConversation(usr, db)
+                conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+            return render_template("messages.html", conversation=conversation)
+    else:
+        print "hit send\n"
+        message = request.form["textbox1"]
+        if usr == None:
+            print "getting usr...\n"
+            usr = request.form["usr"].replace(" ", "").split(",")
+            usr.append(session['email'])
+            usr.sort()
+            print usr
+            startConversation(usr, db)
+        else:
+            usr = usr.split("_")
+            usr.sort()
+            usr.remove("")
+        print usr
+        sendMessage(session['email'], usr, message, db)
+    s = ""
+    for email in usr:
+        s+= "_" + email
+    return redirect('messages/'+s)
+
+
+
 
 @app.route("/create_wall", methods=["GET", "POST"])
 def create_w():
@@ -230,6 +300,7 @@ def logout():
 
     flash("You have been logged out")
     return redirect('home')
+
 
 if __name__ == "__main__":
     app.debug = True

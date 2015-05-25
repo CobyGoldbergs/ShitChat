@@ -4,7 +4,7 @@
 
 
   <head>
-<<<<<<< HEAD
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <title>ShitChat</title>
@@ -16,7 +16,7 @@
   <div class="container">
     <ul class="nav navbar-nav">
 	<li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
-	<li class="active"><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+	<li class="active"><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
 	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
     </ul>
 	<span style="line-height:5px;">
@@ -32,50 +32,51 @@
           <form class="navbar-form navbar-right" method="POST">
 	    <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
             <input type="submit" name="b" class="btn btn-danger" value="Log Out">
+	    <input type="submit" name="b" class="btn btn-primary" value="Settings">
           </form>
 	</span>
   </div>
 </nav>
 </head>
 
+
+
 <body style="padding-top:70px">
 <div class="container-fluid">
-
-<h1>Hello World</h1>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 </div>
-</body>
-=======
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-</head>
-  <body>
-      
-      <div style="overflow:scroll; height:200px; width: 200px; border:1px solid black;" id="block">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    
+    <form method="POST">
+    {% if conversation == 0 %}
+    To:<input name="usr" id="usr" type="text" value="example@email.com">
+    {% else %}
+    {% set rec = conversation['tag'] %}
+    To: {% for n in rec %}{{n}}, {% endfor %}
+    {% endif %}
+      <div style="overflow:scroll; height:200px; width: 200px; border:1px solid black; scrollTop:scrollHeight" id="block">
+          <p>
+          {% if conversation != 0 %}
+          {% set messages = conversation['messages']  %}
+          {% for message in messages %}
+          
+          {{message[0]}}: {{message[2]}} <br>
+          
+          {% endfor %}
+          {% endif %}
+          </p>
       </div>
 
-      <input name="textbox1" id="textbox1" type="text">
-      <input name="send" onclick="send(document.getElementById('textbox1').value)" type="button" value="send">
 
+
+      <input name="textbox1" id="textbox1" type="text">
+      <input name="b" onclick="send(document.getElementById('textbox1').value)" type="submit" value="send">
+    </form>
 
     <script src="../message.js"></script>
         </body>
->>>>>>> 885d0f6713f2cbe218f96eda6297924962007ff6
 </html>
 
