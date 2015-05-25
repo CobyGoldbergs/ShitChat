@@ -1,5 +1,5 @@
 from flask import Flask, flash, session, request, url_for, redirect, render_template
-from pymongo import Connection
+from pymongo import MongoClient
 from utils import *
 from functools import wraps
 import pymongo
@@ -9,8 +9,8 @@ import string
 app = Flask(__name__)
 
 # mongo 
-conn = Connection()
-db = conn['users']
+# conn = Connection()
+db = Mongoclient['users']
 
 
 #walls = db.walls.find()
