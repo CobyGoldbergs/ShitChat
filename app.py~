@@ -9,9 +9,10 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
-
+<<<<<<< HEAD
 #db.messages.remove()
-
+=======
+>>>>>>> bf2b714f96bbd2a9cbb91953ed39d700b37d9893
 
 def auth(page):
     def decorate(f):
@@ -142,6 +143,7 @@ def messages(usr = None):
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
             return render_template("messages.html", conversation=conversation)
     else:
+<<<<<<< HEAD
         print "hit send\n"
         message = request.form["textbox1"]
         if usr == None:
@@ -161,7 +163,27 @@ def messages(usr = None):
     for email in usr:
         s+= "_" + email
     return redirect('messages/'+s)
-
+=======
+        print "Here"
+        if request.form['b'] == "send":
+            #print "here2"
+            #if usr == None:
+                #print "setting user"
+            usr = request.form['usr']
+                #print "starting conversation"
+                #print "Recep: " + usr
+            x = startConversation(session['email'], usr, db)
+            update_user(session['email'], {'conversations' : x['user']}, db)
+            update_user(usr, {'conversations' : x['rec']}, db)
+            #print "collecting message"
+            l = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+            print l
+            message = request.form['textbox1']
+            #print "sending message"
+            session['conversations'] = sendMessage(session['email'], usr, message, db)
+            conversation = session['conversations'][usr][1]
+            return redirect('messages/'+usr)
+>>>>>>> bf2b714f96bbd2a9cbb91953ed39d700b37d9893
 
 
 
