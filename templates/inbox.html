@@ -15,7 +15,7 @@
                     <div class="container">
                         <ul class="nav navbar-nav">
                             <li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
-                            <li class="active"><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+                            <li class="active"><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
                             <li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
                         </ul>
                         <span style="line-height:5px;">
@@ -45,10 +45,26 @@
     <button type="submit" name="b" class="btn btn-success" value="New Message">New Message</button>
     </form>
 
-{% for name in conversations %}
+{% for con in conversations %}
 
-
-<a href='/messages/{{name}}' > {{name}} </a> <br>
+    {% set emails = con['tag'] %}
+    
+    {% set tag = {'usr' : "", other:""} %}
+    {% set usr = "" %}
+    {% set other = "" %}
+    
+    {% for email in emails %}
+        
+        {% set usr = usr + "_" + email %}
+        {% if tag.update({'usr': usr}) %} {% endif %}
+        
+        
+        {% if email != sender %} {% set other = other + email + ", " %} {% endif %}
+        {% if tag.update({'other': other}) %} {% endif %}
+        
+    {% endfor %}
+    
+    <a href='/messages/{{tag['usr']}}' >{{ tag['other'] }}</a> <br>
 
 {% endfor %}
 

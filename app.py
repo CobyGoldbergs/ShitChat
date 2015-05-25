@@ -9,7 +9,7 @@ app = Flask(__name__)
 conn = Connection()
 db = conn['users']
 
-
+#db.messages.remove()
 
 def auth(page):
     def decorate(f):
@@ -99,16 +99,13 @@ def home():
 @auth("/inbox")
 def inbox():
     if request.method == "GET":
+        messages = db.messages.find()
         conversations = []
-        
-        print "\n", session['conversations'], "\n"
-        
-        for key in session['conversations']:
-            print key
-            conversations.append(key)
-       
-        print conversations
-        return render_template("inbox.html", conversations = conversations)
+        for conversation in messages:
+            for user in conversation['tag']:
+                if user == session['email']:
+                    conversations.append(conversation)
+        return render_template("inbox.html", conversations = conversations, sender = session['email'])
     else:
         if request.form['b'] == "New Message":
             return redirect('messages')
@@ -120,25 +117,43 @@ def inbox():
 def messages(usr = None):
     if request.method == "GET":
         if usr == None:
+            messages = db.messages.find()
+            for message in messages:
+                print message
             return render_template("messages.html", conversation=0)
         else:
-            conversation = session['conversations'][usr][1]
-            return render_template("messages.html", conversation=conversation, rec=usr)
+            usr = usr.split("_")
+            usr.sort()
+            print usr
+            while "" in usr:
+                usr.remove("")
+            print "\n", usr, "\n"
+            conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+            print conversation
+            if conversation == None:
+                startConversation(usr, db)
+                conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+            return render_template("messages.html", conversation=conversation)
     else:
-        print "Here"
-        if request.form['b'] == "send":
-            print "here2"
-            if usr == None:
-                print "setting user"
-                usr = request.form['usr']
-                print "starting conversation"
-                startConversation(session['email'], usr, db)
-            print "collecting message"
-            message = request.form['textbox1']
-            print "sending message"
-            session['conversations'] = sendMessage(session['email'], usr, message, db)
-    conversation = session['conversations'][usr][1]
-    return redirect('messages/'+usr)
+        print "hit send\n"
+        message = request.form["textbox1"]
+        if usr == None:
+            print "getting usr...\n"
+            usr = request.form["usr"].replace(" ", "").split(",")
+            usr.append(session['email'])
+            usr.sort()
+            print usr
+            startConversation(usr, db)
+        else:
+            usr = usr.split("_")
+            usr.sort()
+            usr.remove("")
+        print usr
+        sendMessage(session['email'], usr, message, db)
+    s = ""
+    for email in usr:
+        s+= "_" + email
+    return redirect('messages/'+s)
 
 
 
@@ -148,6 +163,8 @@ def logout():
     session.pop('logged_in', None)
     flash("You have been logged out")
     return redirect('home')
+
+
 
 if __name__ == "__main__":
 	app.debug = True

@@ -15,7 +15,7 @@
   <div class="container">
     <ul class="nav navbar-nav">
 	<li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
-	<li class="active"><a href="/messages">Messages <span class="sr-only">(current)</span></a></li>
+	<li class="active"><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
 	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
     </ul>
 	<span style="line-height:5px;">
@@ -53,12 +53,14 @@
     {% if conversation == 0 %}
     To:<input name="usr" id="usr" type="text" value="example@email.com">
     {% else %}
-    To: {{rec}}
+    {% set rec = conversation['tag'] %}
+    To: {% for n in rec %}{{n}}, {% endfor %}
     {% endif %}
       <div style="overflow:scroll; height:200px; width: 200px; border:1px solid black; scrollTop:scrollHeight" id="block">
           <p>
           {% if conversation != 0 %}
-          {% for message in conversation %}
+          {% set messages = conversation['messages']  %}
+          {% for message in messages %}
           
           {{message[0]}}: {{message[2]}} <br>
           
