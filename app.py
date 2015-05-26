@@ -336,36 +336,47 @@ def walls():
 @app.route("/canvas", methods=["GET", "POST"])
 def canvas():
     red = json.loads(json.dumps(request.args.get("red")))
+    white = json.loads(json.dumps(request.args.get("white")))
     print red
     print request.query_string
 
-    request_string = request.query_string
-    request_data = ""
+    #red_request_string = request.query_string
+    red_request_string = ""
+    white_request_string = ""
+    stop_red = False
+    for x in range(0, len(request.query_string)):
+        if(request.query_string[x] == "w"):
+            stop_red = True
+        elif(not(stop_red)):
+            red_request_string = red_request_string + request.query_string[x]
+        elif(stop_red):
+            white_request_string = white_request_string + request.query_string[x]
 
-
-    if(len(request_string) > 0):
+    red_request_data = ""
+    if(len(red_request_string) > 0):
         x = 0
-        while(x < len(request_string) - 2):
-            #print request_string[x]
-            if(request_string[x-1] == "="):
+        while(x < len(red_request_string) - 2):
+            #print red_request_string[x]
+            if(red_request_string[x-1] == "="):
                 j = 0;
-                while(len(request_string) > j+x and request_string[j+x].isdigit()):
-                    request_data = request_data + request_string[j+x]
-                    if(j+x+1 >= len(request_string)):
-                        request_data = request_data + ","
-                    elif(not(request_string[j+x+1].isdigit())):
-                        request_data = request_data + ","
+                while(len(red_request_string) > j+x and red_request_string[j+x].isdigit()):
+                    red_request_data = red_request_data + red_request_string[j+x]
+                    if(j+x+1 >= len(red_request_string)):
+                        red_request_data = red_request_data + ","
+                    elif(not(red_request_string[j+x+1].isdigit())):
+                        red_request_data = red_request_data + ","
                     j = j + 1
             x = x + 1
-    print request_data
-    request_data = request_data + "0,0,"
-    if(len(request_string) > 0):
+    print red_request_data
+
+    red_request_data = red_request_data + "0,0,"
+    if(len(red_request_string) > 0):
         request_array = []
         b = 0
         number = ""
         coord_array = []
-        while (b < len(request_data)):
-            if(request_data[b] == ","):
+        while (b < len(red_request_data)):
+            if(red_request_data[b] == ","):
                 if(len(coord_array) < 2):
                     coord_array.append(int(float(number)))
                 elif(len(coord_array) == 2):
@@ -374,7 +385,44 @@ def canvas():
                     coord_array.append(int(float(number)))
                 number = ""
             else:
-                number = number + request_data[b]
+                number = number + red_request_data[b]
+            b = b + 1
+        print request_array
+
+    white_request_data = ""
+    if(len(white_request_string) > 0):
+        x = 0
+        while(x < len(white_request_string) - 2):
+            #print white_request_string[x]
+            if(white_request_string[x-1] == "="):
+                j = 0;
+                while(len(white_request_string) > j+x and white_request_string[j+x].isdigit()):
+                    white_request_data = white_request_data + white_request_string[j+x]
+                    if(j+x+1 >= len(white_request_string)):
+                        white_request_data = white_request_data + ","
+                    elif(not(white_request_string[j+x+1].isdigit())):
+                        white_request_data = white_request_data + ","
+                    j = j + 1
+            x = x + 1
+    print white_request_data
+
+    white_request_data = white_request_data + "0,0,"
+    if(len(white_request_string) > 0):
+        request_array = []
+        b = 0
+        number = ""
+        coord_array = []
+        while (b < len(white_request_data)):
+            if(white_request_data[b] == ","):
+                if(len(coord_array) < 2):
+                    coord_array.append(int(float(number)))
+                elif(len(coord_array) == 2):
+                    request_array.append(coord_array)
+                    coord_array = []
+                    coord_array.append(int(float(number)))
+                number = ""
+            else:
+                number = number + white_request_data[b]
             b = b + 1
         print request_array
 
