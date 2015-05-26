@@ -358,13 +358,13 @@ def canvas():
                     j = j + 1
             x = x + 1
     print request_data
-
+    request_data = request_data + "0,0,"
     if(len(request_string) > 0):
         request_array = []
         b = 0
         number = ""
         coord_array = []
-        while (b < len(request_data)-1):
+        while (b < len(request_data)):
             if(request_data[b] == ","):
                 if(len(coord_array) < 2):
                     coord_array.append(int(float(number)))
