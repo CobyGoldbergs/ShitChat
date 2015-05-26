@@ -157,6 +157,21 @@ def inbox():
     else:
         if request.form['b'] == "New Message":
             return redirect('messages')
+        if request.form["b"] == "Log Out":
+            return logout()
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
+        if request.form['b'] == "Search Wall":
+            x = search_wall(request.form, db)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
+            return render_template("search_results.html", walls = x)
+        if request.form['b'] == "Search User":
+            add_friend(request.form, session, db)
+            user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
+            session['friends'] = user['friends']
+            return redirect('home')
 
 
 @app.route("/messages", methods=["GET", "POST"])
@@ -182,26 +197,42 @@ def messages(usr = None):
                 startConversation(usr, db)
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
             return render_template("messages.html", conversation=conversation)
-    else:
-        print "hit send\n"
-        message = request.form["textbox1"]
-        if usr == None:
-            print "getting usr...\n"
-            usr = request.form["usr"].replace(" ", "").split(",")
-            usr.append(session['email'])
-            usr.sort()
-            print usr
-            startConversation(usr, db)
+    if request.method == "POST":
+        if request.form["b"] == "Log Out":
+            return logout()
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
+        if request.form['b'] == "Search Wall":
+            x = search_wall(request.form, db)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
+            return render_template("search_results.html", walls = x)
+        if request.form['b'] == "Search User":
+            add_friend(request.form, session, db)
+            user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
+            session['friends'] = user['friends']
+            return redirect('home')
         else:
-            usr = usr.split("_")
-            usr.sort()
-            usr.remove("")
-        print usr
-        sendMessage(session['email'], usr, message, db)
-    s = ""
-    for email in usr:
-        s+= "_" + email
-    return redirect('messages/'+s)
+            print "hit send\n"
+            message = request.form["textbox1"]
+            if usr == None:
+                print "getting usr...\n"
+                usr = request.form["usr"].replace(" ", "").split(",")
+                usr.append(session['email'])
+                usr.sort()
+                print usr
+                startConversation(usr, db)
+            else:
+                usr = usr.split("_")
+                usr.sort()
+                usr.remove("")
+                print usr
+                sendMessage(session['email'], usr, message, db)
+            s = ""
+            for email in usr:
+                s+= "_" + email
+            return redirect('messages/'+s)
 
 
 
@@ -284,6 +315,23 @@ def walls():
             print key
             print wall_dict[key]
         return render_template("walls.html", walls=wall_dict)
+    else:
+        if request.form["b"] == "Log Out":
+            return logout()
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
+        if request.form['b'] == "Search Wall":
+            x = search_wall(request.form, db)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
+            return render_template("search_results.html", walls = x)
+        if request.form['b'] == "Search User":
+            add_friend(request.form, session, db)
+            user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
+            session['friends'] = user['friends']
+            return redirect('home')
+
 
 @app.route("/canvas", methods=["GET", "POST"])
 def canvas():
@@ -333,7 +381,6 @@ def canvas():
 
     if request.method == "GET":
         return render_template("canvas.html")
-
 
 #basic log out method
 def logout():

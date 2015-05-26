@@ -19,19 +19,19 @@
 	<li><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
 	<li class="active"><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
     </ul>
-	<span style="line-height:5px;">
-	<form class="navbar-form navbar-left" role="search">
+		<span style="line-height:5px;">
+	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+          <input type="text" class="form-control" placeholder="Search Wall or User" name="name" style="width:150px;">
         </div>
-
-        <input type="submit" name="b" class="btn btn-success" value="Search">
+        <input type="submit" name="b" class="btn btn-success" value="Search Wall">
+	<input type="submit" name="b" class="btn btn-success" value="Search User">
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
       </form>
 	</span>
     <span style="line-height:5px;">
           <form class="navbar-form navbar-right" method="POST">
-	    <p class="navbar-text">Logged in as Pooper123 {{ session['username'] }}</p>
+	    <p class="navbar-text">Logged in as {{ session['first_name'] }} {{ session['last_name']}}</p>
             <input type="submit" name="b" class="btn btn-danger" value="Log Out">
           </form>
 	</span>
