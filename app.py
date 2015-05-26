@@ -5,6 +5,7 @@ from functools import wraps
 import pymongo
 import operator
 import string
+import json
 
 app = Flask(__name__)
 
@@ -286,6 +287,10 @@ def walls():
 
 @app.route("/canvas", methods=["GET", "POST"])
 def canvas():
+    red = json.loads(json.dumps(request.args.get("red")))
+    print red
+    print "nig-nog"
+    print request
     if request.method == "GET":
         return render_template("canvas.html")
 
