@@ -289,19 +289,39 @@ def walls():
 def canvas():
     red = json.loads(json.dumps(request.args.get("red")))
     print red
-    print "nig-nog"
-    print request
+    print request.query_string
+
     request_string = request.query_string
-    request_string += "   "
     request_data = ""
-    for x in (0, len(request_string)):
-        if(request_string[x] == "="):
-            j = 1
-            while(request_string[j+x].isdigit()):
-                request_data += request_string[j+x]
-                if(not(request_string[j+x+1].isdigit()) or j+x+1 >= len(request_string)):
-                    request_data += ","
-    print request_data
+
+
+    if(len(request_string) > 0):
+        x = 0
+        while(x < len(request_string) - 2):
+            #print request_string[x]
+            if(request_string[x-1] == "="):
+                j = 0;
+                while(len(request_string) > j+x and request_string[j+x].isdigit()):
+                    request_data = request_data + request_string[j+x]
+                    if(j+x+1 >= len(request_string)):
+                        request_data = request_data + ","
+                    elif(not(request_string[j+x+1].isdigit())):
+                        request_data = request_data + ","
+                    j = j + 1
+            x = x + 1
+    
+    if(len(request_string) > 0):
+        request_array = []
+        b = 0
+        number = ""
+        while (b < len(request_data)-1):
+            if(request_data[b] == ","):
+                request_array.append(int(float(number)))
+                number = ""
+            else:
+                number = number + request_data[b]
+            b = b + 1
+        print request_array
 
     if request.method == "GET":
         return render_template("canvas.html")
