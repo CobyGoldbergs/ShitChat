@@ -162,6 +162,7 @@
 			        document.getElementById("blue").style.visibility="hidden";
 			        document.getElementById("green").style.visibility="hidden";
 			        //take list of coordinates and upload to the doodle database
+			        console.log(redEdits);
 			        $.getJSON("/canvas",{red:redEdits});
 			        //whiteEdits = [];
 			        redEdits = [];

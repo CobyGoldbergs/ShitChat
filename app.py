@@ -291,6 +291,18 @@ def canvas():
     print red
     print "nig-nog"
     print request
+    request_string = request.query_string
+    request_string += "   "
+    request_data = ""
+    for x in (0, len(request_string)):
+        if(request_string[x] == "="):
+            j = 1
+            while(request_string[j+x].isdigit()):
+                request_data += request_string[j+x]
+                if(not(request_string[j+x+1].isdigit()) or j+x+1 >= len(request_string)):
+                    request_data += ","
+    print request_data
+
     if request.method == "GET":
         return render_template("canvas.html")
 
