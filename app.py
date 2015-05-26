@@ -309,19 +309,27 @@ def canvas():
                         request_data = request_data + ","
                     j = j + 1
             x = x + 1
-    
+    print request_data
+
     if(len(request_string) > 0):
         request_array = []
         b = 0
         number = ""
+        coord_array = []
         while (b < len(request_data)-1):
             if(request_data[b] == ","):
-                request_array.append(int(float(number)))
+                if(len(coord_array) < 2):
+                    coord_array.append(int(float(number)))
+                elif(len(coord_array) == 2):
+                    request_array.append(coord_array)
+                    coord_array = []
+                    coord_array.append(int(float(number)))
                 number = ""
             else:
                 number = number + request_data[b]
             b = b + 1
         print request_array
+
 
     if request.method == "GET":
         return render_template("canvas.html")
