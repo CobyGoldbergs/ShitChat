@@ -10,7 +10,7 @@ import json
 app = Flask(__name__)
 
 # mongo 
-# conn = Connection()
+#conn = Connection()
 db = MongoClient()['users']
 
 
@@ -261,12 +261,19 @@ def create_w():
 @app.route("/wall/<wall_id>", methods=["GET", "POST"])
 def wall_page(wall_id):
     wall = db.walls.find_one( { 'wall_id' : wall_id } )
+    #print wall
     upped = False
     if wall_id in session['walls_upped']:
         upped = True
     if request.method == "GET":
-        return render_template("stall.html", wall=wall, upped=upped)
-    else:
+        print "it's a get"
+        if wall['type'] == "writing":
+            return render_template("stall.html", wall=wall, upped=upped)
+        else:
+            print "so far"
+            return redirect(url_for('canvas', wall_id=wall_id))
+    if request.method == "POST":
+        print "ITS A REQUEST"
         if request.form["b"] == "Log Out":
             return logout()
         if request.form['b'] == "Create a Wall!":
@@ -287,6 +294,123 @@ def wall_page(wall_id):
                 flash('invalid search')
                 return redirect('home')
             return render_template("search_results.html", walls = x)
+        print request.form['b']
+    else:
+        canvas(wall_id, db)
+
+
+@app.route("/canvas/<wall_id>", methods=["GET", "POST"])
+def canvas(wall_id):
+
+    wall = db.walls.find_one( {'wall_id':wall_id} )
+    red = json.loads(json.dumps(request.args.get("red")))
+    white = json.loads(json.dumps(request.args.get("white")))
+    #print red
+    #print request.query_string
+
+    print "red one"
+    print red
+
+    #red_request_string = request.query_string
+    red_request_string = ""
+    white_request_string = ""
+    stop_red = False
+    for x in range(0, len(request.query_string)):
+        if(request.query_string[x] == "w"):
+            stop_red = True
+        elif(not(stop_red)):
+            red_request_string = red_request_string + request.query_string[x]
+        elif(stop_red):
+            white_request_string = white_request_string + request.query_string[x]
+
+    red_request_data = ""
+    if(len(red_request_string) > 0):
+        x = 0
+        while(x < len(red_request_string) - 2):
+            #print red_request_string[x]
+            if(red_request_string[x-1] == "="):
+                j = 0;
+                while(len(red_request_string) > j+x and red_request_string[j+x].isdigit()):
+                    red_request_data = red_request_data + red_request_string[j+x]
+                    if(j+x+1 >= len(red_request_string)):
+                        red_request_data = red_request_data + ","
+                    elif(not(red_request_string[j+x+1].isdigit())):
+                        red_request_data = red_request_data + ","
+                    j = j + 1
+            x = x + 1
+    #print red_request_data
+    #print "please"
+    red_request_data = red_request_data + "0,0,"
+    if(len(red_request_string) > 0):
+        request_array = []
+        b = 0
+        number = ""
+        coord_array = []
+        while (b < len(red_request_data)):
+            if(red_request_data[b] == ","):
+                if(len(coord_array) < 2):
+                    coord_array.append(int(float(number)))
+                elif(len(coord_array) == 2):
+                    request_array.append(coord_array)
+                    coord_array = []
+                    coord_array.append(int(float(number)))
+                number = ""
+            else:
+                number = number + red_request_data[b]
+            b = b + 1
+        #print request_array
+        red_thing = wall['red']
+        red_thing.append(request_array)
+        #print "red"
+        #print red_thing
+        update_wall(wall_id, {'red': red_thing}, db)
+
+    white_request_data = ""
+    if(len(white_request_string) > 0):
+        x = 0
+        while(x < len(white_request_string) - 2):
+            #print white_request_string[x]
+            if(white_request_string[x-1] == "="):
+                j = 0;
+                while(len(white_request_string) > j+x and white_request_string[j+x].isdigit()):
+                    white_request_data = white_request_data + white_request_string[j+x]
+                    if(j+x+1 >= len(white_request_string)):
+                        white_request_data = white_request_data + ","
+                    elif(not(white_request_string[j+x+1].isdigit())):
+                        white_request_data = white_request_data + ","
+                    j = j + 1
+            x = x + 1
+    #print white_request_data
+
+    white_request_data = white_request_data + "0,0,"
+    if(len(white_request_string) > 0):
+        request_array = []
+        b = 0
+        number = ""
+        coord_array = []
+        while (b < len(white_request_data)):
+            if(white_request_data[b] == ","):
+                if(len(coord_array) < 2):
+                    coord_array.append(int(float(number)))
+                elif(len(coord_array) == 2):
+                    request_array.append(coord_array)
+                    coord_array = []
+                    coord_array.append(int(float(number)))
+                number = ""
+            else:
+                number = number + white_request_data[b]
+            b = b + 1
+        #print request_array
+        white_thing = wall['white']
+        white_thing.append(request_array)
+        update_wall(wall_id, {'white': white_thing}, db)
+
+    #print wall
+    
+    if request.method == "GET":
+        wall = db.walls.find_one( {'wall_id':wall_id} )
+        print wall['red']
+        return render_template("canvas.html", wall=wall)
 
 @app.route("/walls", methods=["GET", "POST"])
 def walls():
@@ -331,104 +455,6 @@ def walls():
             user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
             session['friends'] = user['friends']
             return redirect('home')
-
-
-@app.route("/canvas", methods=["GET", "POST"])
-def canvas():
-    red = json.loads(json.dumps(request.args.get("red")))
-    white = json.loads(json.dumps(request.args.get("white")))
-    print red
-    print request.query_string
-
-    #red_request_string = request.query_string
-    red_request_string = ""
-    white_request_string = ""
-    stop_red = False
-    for x in range(0, len(request.query_string)):
-        if(request.query_string[x] == "w"):
-            stop_red = True
-        elif(not(stop_red)):
-            red_request_string = red_request_string + request.query_string[x]
-        elif(stop_red):
-            white_request_string = white_request_string + request.query_string[x]
-
-    red_request_data = ""
-    if(len(red_request_string) > 0):
-        x = 0
-        while(x < len(red_request_string) - 2):
-            #print red_request_string[x]
-            if(red_request_string[x-1] == "="):
-                j = 0;
-                while(len(red_request_string) > j+x and red_request_string[j+x].isdigit()):
-                    red_request_data = red_request_data + red_request_string[j+x]
-                    if(j+x+1 >= len(red_request_string)):
-                        red_request_data = red_request_data + ","
-                    elif(not(red_request_string[j+x+1].isdigit())):
-                        red_request_data = red_request_data + ","
-                    j = j + 1
-            x = x + 1
-    print red_request_data
-
-    red_request_data = red_request_data + "0,0,"
-    if(len(red_request_string) > 0):
-        request_array = []
-        b = 0
-        number = ""
-        coord_array = []
-        while (b < len(red_request_data)):
-            if(red_request_data[b] == ","):
-                if(len(coord_array) < 2):
-                    coord_array.append(int(float(number)))
-                elif(len(coord_array) == 2):
-                    request_array.append(coord_array)
-                    coord_array = []
-                    coord_array.append(int(float(number)))
-                number = ""
-            else:
-                number = number + red_request_data[b]
-            b = b + 1
-        print request_array
-
-    white_request_data = ""
-    if(len(white_request_string) > 0):
-        x = 0
-        while(x < len(white_request_string) - 2):
-            #print white_request_string[x]
-            if(white_request_string[x-1] == "="):
-                j = 0;
-                while(len(white_request_string) > j+x and white_request_string[j+x].isdigit()):
-                    white_request_data = white_request_data + white_request_string[j+x]
-                    if(j+x+1 >= len(white_request_string)):
-                        white_request_data = white_request_data + ","
-                    elif(not(white_request_string[j+x+1].isdigit())):
-                        white_request_data = white_request_data + ","
-                    j = j + 1
-            x = x + 1
-    print white_request_data
-
-    white_request_data = white_request_data + "0,0,"
-    if(len(white_request_string) > 0):
-        request_array = []
-        b = 0
-        number = ""
-        coord_array = []
-        while (b < len(white_request_data)):
-            if(white_request_data[b] == ","):
-                if(len(coord_array) < 2):
-                    coord_array.append(int(float(number)))
-                elif(len(coord_array) == 2):
-                    request_array.append(coord_array)
-                    coord_array = []
-                    coord_array.append(int(float(number)))
-                number = ""
-            else:
-                number = number + white_request_data[b]
-            b = b + 1
-        print request_array
-
-
-    if request.method == "GET":
-        return render_template("canvas.html")
 
 #basic log out method
 def logout():

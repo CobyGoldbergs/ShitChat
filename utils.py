@@ -120,6 +120,10 @@ def create_wall(form, session, db):
         wall['up_votes'] = 0
         wall['contributers'] = []
         wall['num_contributers'] = 0
+
+        wall['white'] = []
+        wall['red'] = []
+
         db.walls.insert(wall)
 
         #ensures that the user has a list of ids of all walls which he/ she created
@@ -295,7 +299,6 @@ def sendMessage(email, tag, message, db):
     messages.append(newMessage)
 
     update_message(tag, {'messages' : messages}, db)
-
 
 
 

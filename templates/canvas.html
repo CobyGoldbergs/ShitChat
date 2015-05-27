@@ -163,7 +163,7 @@
 			        document.getElementById("green").style.visibility="hidden";
 			        //take list of coordinates and upload to the doodle database
 			        console.log(redEdits);
-			        $.getJSON("/canvas",{red:redEdits, white:whiteEdits});
+			        $.getJSON("/canvas/{{wall['wall_id']}}",{red:redEdits, white:whiteEdits});
 			        //whiteEdits = [];
 			        redEdits = [];
 
