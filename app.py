@@ -218,6 +218,7 @@ def messages(usr = None):
             message = request.form["textbox1"]
             if usr == None:
                 print "getting usr...\n"
+                print request.form["usr"]
                 usr = request.form["usr"].replace(" ", "").split(",")
                 usr.append(session['email'])
                 usr.sort()
@@ -226,7 +227,8 @@ def messages(usr = None):
             else:
                 usr = usr.split("_")
                 usr.sort()
-                usr.remove("")
+                while "" in usr:                    
+                    usr.remove("")
                 print usr
                 sendMessage(session['email'], usr, message, db)
             s = ""

@@ -41,6 +41,9 @@
     <body style="padding-top:70px">
     <div class="container-fluid">
 
+<div class="row">
+<div class="col-lg-8">
+
     <form method="POST">
     <button type="submit" name="b" class="btn btn-success" value="New Message">New Message</button>
     </form>
@@ -68,6 +71,34 @@
 
 {% endfor %}
 
+</div>
+<div class="col-lg-4">
+<div class="jumbotron jumbotron" style="height:100%; background-color: #0B3861; overflow: scroll;">
+		<div class="container-fixed-right">
+		<div class="row">
+		<form type="POST">
+		<div class="col-sm-9">
+		<input type="text" class="form-control" name="friend" placeholder="Friend Email">
+		</div>
+		<div class="col-sm-2">
+		<input type="submit" name="b" value="Add Friend" class="btn btn-success">
+		</div></div>
+		<div>
+		<center><h2>Ya Boys</h2></center>
+		{% for friend in session['friends'] %}
+		{% if friend['logged_in'] %}
+		<span class="glyphicon glyphicon-ok-circle" style="color: green;"></span>
+		{% else %}
+		<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
+		{% endif %}
+		<a href="messages/{{ friend['email'] }}"> {{friend['first_name']}} {{friend['last_name']}}</a><br>
+		{% endfor %}
+		</div>
+		</div>
+	</div>
+
+
+</div>
 </div>
 </body>
 </html>
