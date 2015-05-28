@@ -22,10 +22,9 @@
 			<span style="line-height:5px;">
 	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search Wall or User" name="name" style="width:150px;">
+          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
         </div>
         <input type="submit" name="b" class="btn btn-success" value="Search Wall">
-	<input type="submit" name="b" class="btn btn-success" value="Search User">
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
       </form>
 	</span>
@@ -41,7 +40,7 @@
 
 
 
-<body style="padding-top:70px">
+<body style="padding-top:70px;">
 <div class="container-fluid">
 
 <div class="row">
@@ -54,7 +53,7 @@
     To:<input name="usr" id="usr" type="text" value="example@email.com">
     {% else %}
     {% set rec = conversation['tag'] %}
-    <h4>Conversation with {% for n in rec %}{{n}}, {% endfor %}
+    <h4>Conversation with {% for n in rec %}{{n}}, {% endfor %}</h4>
     {% endif %}
       <div style="overflow:scroll; height:80%; width: 100%; border:1px solid black; scrollTop:scrollHeight; padding-left:5px; background-color: #252E33;" id="block">
           {% if conversation != 0 %}
@@ -76,9 +75,13 @@
 <br>
 
 
-
-      <input name="textbox1" id="textbox1" type="text" class="form-control" style="width:90%;">
-      <input name="b" onclick="send(document.getElementById('textbox1').value)" type="submit" value="send">
+	<div class="row">
+	<div class="col-md-10">
+      <input name="textbox1" id="textbox1" type="text" class="form-control">
+	</div><div class="col-md-2">
+      <input name="b" onclick="send(document.getElementById('textbox1').value)" type="submit" value="send" class="btn btn-info" style="width: 100%;">
+	</div>
+	</div>
     </form>
 
 </div>
@@ -99,12 +102,13 @@
 		{% endif %}
 		<center><h2>Ya Boys</h2></center>
 		{% for friend in session['friends'] %}
+		<h4>
 		{% if friend['logged_in'] %}
 		<span class="glyphicon glyphicon-ok-circle" style="color: green;"></span>
 		{% else %}
 		<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
 		{% endif %}
-		<a href="messages/{{ friend['email'] }}"> {{friend['first_name']}} {{friend['last_name']}}</a><br>
+		<a href="messages/{{ friend['email'] }}"> {{friend['first_name']}} {{friend['last_name']}}</a></h4><br>
 		{% endfor %}
 		</div>
 		</div>

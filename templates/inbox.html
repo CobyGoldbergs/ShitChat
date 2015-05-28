@@ -10,7 +10,7 @@
                 
                 <nav class="navbar navbar-default navbar-fixed-top">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="#">ShitChat</a>
+                        <a class="navbar-brand" href="#"><strong>ShitChat</strong></a>
                     </div>
                     <div class="container">
                         <ul class="nav navbar-nav">
@@ -21,10 +21,9 @@
 		<span style="line-height:5px;">
 	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search Wall or User" name="name" style="width:150px;">
+          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
         </div>
         <input type="submit" name="b" class="btn btn-success" value="Search Wall">
-	<input type="submit" name="b" class="btn btn-success" value="Search User">
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
       </form>
 	</span>
@@ -89,12 +88,13 @@
 		{% endif %}
 		<center><h2>Ya Boys</h2></center>
 		{% for friend in session['friends'] %}
+		<h4>
 		{% if friend['logged_in'] %}
 		<span class="glyphicon glyphicon-ok-circle" style="color: green;"></span>
 		{% else %}
 		<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
 		{% endif %}
-		<a href="messages/{{ friend['email'] }}"> {{friend['first_name']}} {{friend['last_name']}}</a><br>
+		<a href="messages/{{ friend['email'] }}"> {{friend['first_name']}} {{friend['last_name']}}</a></h4><br>
 		{% endfor %}
 		</div>
 		</div>
