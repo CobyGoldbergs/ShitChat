@@ -16,6 +16,7 @@
 					</div>
 				</li>
 				<li class="list-group-item">
+					
 					<center><canvas style="border:3px solid" id="c" width="600" height="500"></canvas></center>
 				</li>
 				<li class="list-group-item">
@@ -76,14 +77,37 @@
 			}
 			window.onload = function() {
 			    ctx.fillStyle ="rgba(0, 10, 25, 0)";
+			    redEdits = {{wall['red']}};
+			    whiteEdits = {{wall['white']}};
+			    console.log(redEdits);
+			    console.log(whiteEdits);
+
+			    //load red doodles
+			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
+			    for(var i = 0; i < redEdits[redEdits.length-1].length; i++){
+			    	console.log(i);
+			    	console.log(redEdits[redEdits.length-1][i]);
+					ctx.beginPath();
+					ctx.arc(redEdits[redEdits.length-1][i][0], redEdits[redEdits.length-1][i][1], 10, 0,2*Math.PI);
+					ctx.fill();
+			    }
+			    //load white doodles
+			    ctx.fillStyle ="rgba(255, 255, 255, 1)";
+			    for(var i = 0; i < whiteEdits[whiteEdits.length-1].length; i++){
+			    	console.log(i);
+			    	console.log(whiteEdits[whiteEdits.length-1][i]);
+					ctx.beginPath();
+					ctx.arc(whiteEdits[whiteEdits.length-1][i][0], whiteEdits[whiteEdits.length-1][i][1], 10, 0,2*Math.PI);
+					ctx.fill();
+			    }
 			};
 
 			draw = function (e) { 
-			    //draws a circle at (e.offsetX, e.offsetY) of radius 7.
+			    //draws a circle at (e.offsetX, e.offsetY) of a certain radius.
 			    ctx.beginPath();
 			    ctx.arc(e.offsetX, e.offsetY, radius, 0,2*Math.PI);
 			    ctx.fill();
-			    //stores red and white circle data
+			    //stores circle data
 			    if(redSelected){
 			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- red marker");
 			        redEdits[redEdits.length] = [e.offsetX, e.offsetY];
@@ -111,8 +135,8 @@
 			});
 
 			redMarker.addEventListener("click",function(e){
-			    ctx.fillStyle ="rgba(255, 0, 0, .45)";
-			    radius= 4;
+			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
+			    radius= 10;
 			    eraserSelected = false;
 			    markerSelected = true;
 			    redSelected = true;
@@ -121,8 +145,8 @@
 
 			});
 			blueMarker.addEventListener("click",function(e){
-			    ctx.fillStyle ="rgba(0, 0, 255, .45)";
-			    radius= 4;
+			    ctx.fillStyle ="rgba(0, 0, 255, 1)";
+			    radius= 10;
 			    eraserSelected = false;
 			    markerSelected = true;
 			    redSelected = false;
@@ -130,8 +154,8 @@
 			    greenSelected = false;
 			});
 			greenMarker.addEventListener("click",function(e){
-			    ctx.fillStyle ="rgba(0, 255, 0, .45)";
-			    radius= 4;
+			    ctx.fillStyle ="rgba(0, 255, 0, 1)";
+			    radius= 10;
 			    eraserSelected = false;
 			    markerSelected = true;
 			    redSelected = false;
@@ -139,8 +163,8 @@
 			    greenSelected = true;
 			});
 			eraser.addEventListener("click",function(e){
-			    ctx.fillStyle ="rgba(255, 255, 255, .95)";
-			    radius= 20;
+			    ctx.fillStyle ="rgba(255, 255, 255, 1)";
+			    radius= 10;
 			    markerSelected = false;
 			    redSelected = false;
 			    blueSelected = false;
