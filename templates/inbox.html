@@ -83,7 +83,10 @@
 		<div class="col-sm-2">
 		<input type="submit" name="b" value="Add Friend" class="btn btn-success">
 		</div></div>
-		<div>
+		</div>
+		{% if message is defined %}
+		<div class="alert alert-danger alert-dismissable">{{ message }}</div>
+		{% endif %}
 		<center><h2>Ya Boys</h2></center>
 		{% for friend in session['friends'] %}
 		{% if friend['logged_in'] %}
