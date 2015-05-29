@@ -268,14 +268,11 @@ def wall_page(wall_id):
     if wall_id in session['walls_upped']:
         upped = True
     if request.method == "GET":
-        print "it's a get"
         if wall['type'] == "writing":
             return render_template("stall.html", wall=wall, upped=upped)
         else:
-            print "so far"
             return redirect(url_for('canvas', wall_id=wall_id))
     if request.method == "POST":
-        print "ITS A REQUEST"
         if request.form["b"] == "Log Out":
             return logout()
         if request.form['b'] == "Create a Wall!":
@@ -290,13 +287,12 @@ def wall_page(wall_id):
             new_ses = up_vote(wall_id, session, db)
             session['walls_upped'] = new_ses
             return redirect(url_for('wall_page', wall_id=wall_id))
-        if request.form['b'] == "search":
+        if request.form['b'] == "Search Wall":
             x = search_wall(request.form, db)
             if x == []:
                 flash('invalid search')
                 return redirect('home')
             return render_template("search_results.html", walls = x)
-        print request.form['b']
     else:
         canvas(wall_id, db)
 
@@ -408,12 +404,27 @@ def canvas(wall_id):
         update_wall(wall_id, {'white': white_thing}, db)
 
     #print wall
-    
+    if request.method == "POST":
+        if request.form["b"] == "up_vote":
+            new_ses = up_vote(wall_id, session, db)
+            session['walls_upped'] = new_ses
+            return redirect(url_for('wall_page', wall_id=wall_id))
+        if request.form["b"] == "Log Out":
+            return logout()
+        if request.form['b'] == "Create a Wall!":
+            return redirect("create_wall")
+        if request.form['b'] == "Search Wall":
+            x = search_wall(request.form, db)
+            if x == []:
+                flash('invalid search')
+                return redirect('home')
+            return render_template("search_results.html", walls = x)
+        
     if request.method == "GET":
         wall = db.walls.find_one( {'wall_id':wall_id} )
         
-       upped = False
-       if wall_id in session['walls_upped']:
+        upped = False
+        if wall_id in session['walls_upped']:
             upped = True
         
         return render_template("canvas.html", wall=wall, upped=upped)
