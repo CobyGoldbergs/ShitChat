@@ -411,8 +411,12 @@ def canvas(wall_id):
     
     if request.method == "GET":
         wall = db.walls.find_one( {'wall_id':wall_id} )
-        print wall['red']
-        return render_template("canvas.html", wall=wall)
+        
+       upped = False
+       if wall_id in session['walls_upped']:
+            upped = True
+        
+        return render_template("canvas.html", wall=wall, upped=upped)
 
 @app.route("/walls", methods=["GET", "POST"])
 def walls():
