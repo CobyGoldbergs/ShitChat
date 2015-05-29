@@ -1,46 +1,111 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html> 
-	<head>
-    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	</head>
-	<body>
-		<div class="panel-body">
-			<ul class="list-group">
-				<li class="list-group-item">
-					<h2> Name of Doodle </h2>
-					<h4> Contributors </h4>
-				</li>
-				<li class="list-group-item">
-					<div style:"border:3px solid" id = "edit" width="100">
-						Click here to edit
+
+<html lang="en">
+
+
+  <head>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <title>ShitChat</title>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+	<a class="navbar-brand" href="#"><strong>ShitChat</strong></a>
+	</div>
+  <div class="container">
+    <ul class="nav navbar-nav">
+	<li><a href="/home">Home <span class="sr-only">(current)</span></a></li>
+	<li><a href="/inbox">Messages <span class="sr-only">(current)</span></a></li>
+	<li><a href="/walls">Walls <span class="sr-only">(current)</span></a></li>
+    </ul>
+			<span style="line-height:5px;">
+	<form class="navbar-form navbar-left" role="search" method="POST">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+        </div>
+        <input type="submit" name="b" class="btn btn-success" value="Search Wall">
+	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
+      </form>
+	</span>
+    <span style="line-height:5px;">
+          <form class="navbar-form navbar-right" method="POST">
+	    <p class="navbar-text">Logged in as {{ session['first_name'] }} {{ session['last_name']}}</p>
+            <input type="submit" name="b" class="btn btn-danger" value="Log Out">
+          </form>
+	</span>
+  </div>
+</nav>
+</head>
+
+
+
+<body style="padding-top:70px; background-image:url('../static/IMG_0326.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center center; -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;">
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-3">
+<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); border: 0px; margin-right: 20px; height: 100%; overflow-top: scroll;">
+<center>
+<h2>Description</h2>
+</center>
+<h4>{{wall['description']}}</h4>
+<h5>{{wall['num_contributers']}} Contributers </h5>
+
+</div>
+
+
+</div>
+<div class="col-lg-6">
+<div class="jumbotron" style="background: rgba(100, 100, 100, 0.1); height:100%; border: 0px; margin-top: 0px; overflow: scroll; padding-left: 30px; padding-right:50px;">
+
+ <form method="POST"><h2>&nbsp;&nbsp;&nbsp;<span class="label label-success">{{wall['up_votes']}}</span>
+{% if upped == False %}
+<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;"><span class="glyphicon glyphicon-arrow-up"></span><span class="glyphicon glyphicon-thumbs-up"></span></button>
+{% endif %}
+{% if upped == True %}
+<button type="submit" value="up_vote" class="btn btn-lg btn-success" name="b" style="float: right;" disabled><span class="glyphicon glyphicon-arrow-up" style="color: #2212FF;"></span><span class="glyphicon glyphicon-thumbs-up" style="color: #2212FF;"></span></button>
+{% endif %}
+
+</h2></form>
+<h2><center>{{wall['name']}}</center></h2>
+</center>
+<div class="panel-body">
+<div class="row">
+<div class="col-sm-5">
+<div style:"border:3px solid" id = "edit" width="100">
+						<center><a><h4>Click here to edit</h4></a></center>
 					</div>
-				</li>
-				<li class="list-group-item">
-					
-					<center><canvas style="border:3px solid" id="c" width="600" height="500"></canvas></center>
-				</li>
-				<li class="list-group-item">
-					<div class="well well-sm" id="tools">
+</div>
+<div class="col-sm-7">
+<div id="tools">
+
 						<img 
 							src='https://lh4.ggpht.com/lcydxe9aTLvDT5flQ4PldQQswbnrC0tR4IIpTQjPr5PI2fSSvHhlc3ENf2B6DyGZOIY=w300' 
-							id='eraser' width='100'>
-						<img 
+							id='eraser' width='50' height="50">
+
+						<img height="50" 
 					    	src="http://www.wpclipart.com/education/supplies/markers/text_marker_drawing_orange.svg"
-					     	id="marker" width="100">
+					     	id="marker" width="50">
 					    <img 
-					    	src='http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/512px-Circle-green.svg.png' width='50' 
+					    	src='http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/512px-Circle-green.svg.png' width='25' 
 					    	id='green' style="visibility:hidden"> 
                         <img 
-                        	src ='http://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Circle-red.svg/512px-Circle-red.svg.png' width='50' 
+                        	src ='http://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Circle-red.svg/512px-Circle-red.svg.png' width='25' 
                         	id='red' style="visibility:hidden">
-                       	<img 
-                       		src ='http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Circle-blue.svg/2000px-Circle-blue.svg.png' width='50' 
+                       	<img
+                       		src ='http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Circle-blue.svg/2000px-Circle-blue.svg.png' width='25' 
                        		id='blue' style="visibility:hidden">
 					  	  
 					</div>
-				</li>
-			</ul>    
+</div></div><hr>
+					<div class="container" style="width:100%; overflow:hidden;">
+					<center><canvas style="border:0px solid; top:0px; left:0px;" id="c" width="600" height="2000"></canvas></center> 
+					</div>
 		</div>
+</div></div>
 		<img hidden src="#" id="saved">
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1-rc2/jquery.js"></script>
 		<script>
@@ -178,10 +243,10 @@
 
 			editButton.addEventListener("click",function(e){
 			    if(!canEdit){
-			        document.getElementById("edit").innerHTML = "Now Editing - Click Here To Save";
+			        document.getElementById("edit").innerHTML = "<a><h4>Now Editing - Click Here To Save</h4></a>";
 			    }
 			    else{
-			        document.getElementById("edit").innerHTML = "Click Here To Edit";
+			        document.getElementById("edit").innerHTML = "<center><a><h4>Click Here To Edit</h4></a></center>";
 			        document.getElementById("red").style.visibility="hidden";
 			        document.getElementById("blue").style.visibility="hidden";
 			        document.getElementById("green").style.visibility="hidden";
@@ -202,5 +267,7 @@
 			    }
 			});
 		</script>
+
+</div></div>
 	</body> 
 </html>
