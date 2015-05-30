@@ -1,5 +1,6 @@
 import hashlib, uuid #for password security
 from time import ctime
+import datetime
 
 ##########################     LOGIN/ REGISTER        ##########################
 
@@ -126,12 +127,30 @@ def create_wall(form, session, db):
 
         db.walls.insert(wall)
 
+        walls = db.walls.find()
+        x = []
+        for w in walls:
+            x.append(w)
+
+        if len(x) <= 25:
+            y = x
+        else:
+            y = x[-25:]
+        
+        db.new_walls.remove()
+        for item in y:
+            db.new_walls.insert(item)
+
+        #wall["createdAt"] = datetime.datetime.utcnow()
+        #wall["logEvent"] = 2
+
+        #db.hot_walls.insert(wall)
+
         #ensures that the user has a list of ids of all walls which he/ she created
         id_list = session['public_walls']
         id_list.append(wall['wall_id'])
         update_user(session['email'], {'public_walls':id_list}, db)
 
-        #print "Wall" + name + "created"
         return "Wall " + form['name'] + " created"
 
 #adds a comment, must be given form with the comment, id of the current wall, session and db
@@ -211,6 +230,7 @@ def up_vote(wall_id, session, db):
 # update_dict must be in the form {field_to_update : new_val}
 def update_wall(wall_id, update_dict, db):
     db.walls.update({'wall_id' : wall_id}, {'$set' : update_dict}, upsert=True)
+    db.new_walls.update({'wall_id' : wall_id}, {'$set' : update_dict}, upsert=True)
     return True
 
 # update_dict must be in the form {field_to_update : new_val}

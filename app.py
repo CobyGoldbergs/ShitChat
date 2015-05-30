@@ -14,11 +14,15 @@ app = Flask(__name__)
 db = MongoClient()['users']
 
 
-#walls = db.walls.find()
-#for w in walls:
- #   print w
 
-#db.walls.remove()
+#db.hot_walls.ensure_index( { "createdAt": 1 }, { 'expireAfterSeconds': 60 } )
+
+
+
+#Tue May 26 22:16:53 2015
+
+#db.new_walls.remove()
+
 
 
 #db.messages.remove()
@@ -113,12 +117,10 @@ def about():
 @auth("/home") #To be readded once login is there
 def home():
     test = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
-    print test
     update_user(session['email'], {'conversations' : {'Niggah': 'Hey'}}, db)
     test = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
-    print test
     if request.method == "GET":
-        walls = db.walls.find().sort('up_votes', pymongo.DESCENDING)
+        walls = db.new_walls.find().sort('up_votes', pymongo.DESCENDING)
         return render_template("home.html", walls=walls)
     else:
         print request.form['b']
@@ -303,11 +305,6 @@ def canvas(wall_id):
     wall = db.walls.find_one( {'wall_id':wall_id} )
     red = json.loads(json.dumps(request.args.get("red")))
     white = json.loads(json.dumps(request.args.get("white")))
-    #print red
-    #print request.query_string
-
-    print "red one"
-    print red
 
     #red_request_string = request.query_string
     red_request_string = ""
@@ -325,7 +322,6 @@ def canvas(wall_id):
     if(len(red_request_string) > 0):
         x = 0
         while(x < len(red_request_string) - 2):
-            #print red_request_string[x]
             if(red_request_string[x-1] == "="):
                 j = 0;
                 while(len(red_request_string) > j+x and red_request_string[j+x].isdigit()):
@@ -336,8 +332,6 @@ def canvas(wall_id):
                         red_request_data = red_request_data + ","
                     j = j + 1
             x = x + 1
-    #print red_request_data
-    #print "please"
     red_request_data = red_request_data + "0,0,"
     if(len(red_request_string) > 0):
         request_array = []
@@ -356,18 +350,14 @@ def canvas(wall_id):
             else:
                 number = number + red_request_data[b]
             b = b + 1
-        #print request_array
         red_thing = wall['red']
         red_thing.append(request_array)
-        #print "red"
-        #print red_thing
         update_wall(wall_id, {'red': red_thing}, db)
 
     white_request_data = ""
     if(len(white_request_string) > 0):
         x = 0
         while(x < len(white_request_string) - 2):
-            #print white_request_string[x]
             if(white_request_string[x-1] == "="):
                 j = 0;
                 while(len(white_request_string) > j+x and white_request_string[j+x].isdigit()):
@@ -378,7 +368,6 @@ def canvas(wall_id):
                         white_request_data = white_request_data + ","
                     j = j + 1
             x = x + 1
-    #print white_request_data
 
     white_request_data = white_request_data + "0,0,"
     if(len(white_request_string) > 0):
@@ -398,12 +387,10 @@ def canvas(wall_id):
             else:
                 number = number + white_request_data[b]
             b = b + 1
-        #print request_array
         white_thing = wall['white']
         white_thing.append(request_array)
         update_wall(wall_id, {'white': white_thing}, db)
 
-    #print wall
     if request.method == "POST":
         if request.form["b"] == "up_vote":
             new_ses = up_vote(wall_id, session, db)
@@ -439,7 +426,6 @@ def walls():
         l = []
         for w in walls:
             #create lists of all walls with each letter first
-            print w['name'][0]
             if w['name'][0] == string.uppercase[counter]:
                 l.append(w)
             else:
@@ -452,9 +438,6 @@ def walls():
                     l = []
                 l.append(w)
         wall_dict[string.uppercase[counter]] = l
-        for key in wall_dict:
-            print key
-            print wall_dict[key]
         return render_template("walls.html", walls=wall_dict)
     else:
         if request.form["b"] == "Log Out":
