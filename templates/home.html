@@ -6,7 +6,27 @@
   <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    
+
+    <script type=text/javascript src="{{
+  url_for('static', filename='jquery.js') }}"></script>
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<script type="text/jsx" src="/static/js/script.js"></script>
+
+<script type=text/javascript>
+  $(function() {
+    $('#name').on('input',function(){
+    $.getJSON($SCRIPT_ROOT + '/_search_wall_update', {
+  name: $('input[name="name"]').val(),
+  }, function(data) {
+        $("#dropDown").get(0).selectedIndex = data;
+  });
+  return false;
+  });
+  });
+</script>
+
     <title>ShitChat</title>
 
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -23,6 +43,9 @@
 	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
+	  <ul class="dropdown-menu" id="dropDown" role="menu" aria-labelledby="dropdownMenu1">
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+	  </ul>
         </div>
         <input type="submit" name="b" class="btn btn-success" value="Search Wall">
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
@@ -111,13 +134,16 @@
 </div>
 </div>
 
-
-
+<div>
+<h1>jQuery Example</h1>
+<p><input type=text size=5 name=a> +
+   <input type=text size=5 name=b> =
+   <span id=result>?</span>
+<p><a href=# id=calculate>calculate server side</a>
 
 </body>
 
 <!
 <div class="verticalLine" style="border-left: thick solid #ff0000; height:1000px;">
-
 
 </html>

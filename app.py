@@ -1,4 +1,4 @@
-from flask import Flask, flash, session, request, url_for, redirect, render_template
+from flask import Flask, flash, session, request, url_for, redirect, render_template, jsonify
 from pymongo import MongoClient
 from utils import *
 from functools import wraps
@@ -451,6 +451,11 @@ def logout():
 
     flash("You have been logged out")
     return redirect('home')
+
+@app.route('/_search_wall_update')
+def search_wall_update():
+    name = request.args.get('name', 0, type=str)
+    return jsonify(result=name)
 
 
 if __name__ == "__main__":
