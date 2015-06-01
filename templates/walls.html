@@ -41,14 +41,13 @@
 <body style="padding-top:70px">
 <div class="container-fluid">
 
+
 <h1>Public Bathroom</h1>
-  
-{% for key in walls %}
 
 
-<h3> {{key}} </h3>
+
 <div class="list-group">
-  {% for w in walls[key] %}
+  {% for w in walls %}
   <a href="/wall/{{w['wall_id']}}" class="list-group-item">
     <span class="badge" style="background-color: #088A29;">{{w['up_votes']}}</span>
     <h4 class="list-group-item-heading">{{w['name']}}</h4>
@@ -60,7 +59,6 @@
   </a>
   {% endfor %}
 </div>
-{% endfor %}
 
 
 

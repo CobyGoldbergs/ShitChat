@@ -416,29 +416,14 @@ def canvas(wall_id):
         
         return render_template("canvas.html", wall=wall, upped=upped)
 
-@app.route("/walls", methods=["GET", "POST"])
-def walls():
+@app.route("/walls/<sort>", methods=["GET", "POST"])
+def walls(sort = "new"):
     if request.method == "GET":
-        walls = db.walls.find().sort('name', pymongo.ASCENDING)
-        wall_dict = {}
-        counter = 0
-        wall_dict[string.uppercase[counter]] = []
-        l = []
-        for w in walls:
-            #create lists of all walls with each letter first
-            if w['name'][0] == string.uppercase[counter]:
-                l.append(w)
-            else:
-                while w['name'][0] != string.uppercase[counter]:
-                    wall_dict[string.uppercase[counter]] = l
-                    counter += 1
-                    if counter > 26:
-                        break
-                    wall_dict[string.uppercase[counter]] = []
-                    l = []
-                l.append(w)
-        wall_dict[string.uppercase[counter]] = l
-        return render_template("walls.html", walls=wall_dict)
+        if sort == "new":
+            walls = db.walls.find()
+        if sort == "pop":
+            walls = db.walls.find().sort('up_votes', pymongo.DESCENDING)
+        return render_template("walls.html", walls=walls)
     else:
         if request.form["b"] == "Log Out":
             return logout()
