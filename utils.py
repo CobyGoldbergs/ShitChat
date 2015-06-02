@@ -75,7 +75,6 @@ def authenticate(email, password, db):
 def add_friend(form, session, db):
     email = str(form['name'])
     user = db.users.find_one( { 'email' : email } , { "_id" : False } )
-    print user
     if user == None:
         return False
     friends = session['friends']
@@ -292,7 +291,6 @@ def startConversation(tag, db):
 
 
 def sendMessage(email, tag, message, db):
-    print "sending message..."
     user = db.users.find_one({'email' : email}, {"_id" : False })
 
     

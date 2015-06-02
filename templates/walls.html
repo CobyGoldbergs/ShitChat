@@ -16,7 +16,8 @@
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
-
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <title>ShitChat</title>
 
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -58,7 +59,21 @@
 
 <h1>Public Bathroom</h1>
 
+<div class="dropdown" style="position:relative;">
+  <button class="btn btn-info dropdown-toggle" type="button" id="sort" data-toggle="dropdown" aria-expanded="true">
+    Sort By
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="sort" style="background-color: #0B3861;">
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="new">Most Recent</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="pop">Most Thumbs</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="mypop">My Favorites</a></li>
+    <li role="presentation" class="divider"></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="mywalls">My Walls</a></li>
+  </ul>
+</div>
 
+<br>
 
 <div class="list-group">
   {% for w in walls %}
@@ -69,6 +84,9 @@
     <p>Tags: {% for tag in w['tags'] %}
       <span style="background-color: #0B3861;" class="label label-default">{{tag}}</span> 
       {% endfor %}
+	{% if w['type'] == 'drawing' %}
+	<span class="badge" style="background-color: #FFFF0D; float: right;">Draw</span>
+	{% endif %}
     </p>
   </a>
   {% endfor %}

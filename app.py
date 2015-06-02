@@ -24,9 +24,12 @@ db = MongoClient()['users']
 
 #db.new_walls.remove()
 
+#users = db.users.find()
+#for u in users:
+    #print u
+    #print "SPACE"
 
-
-#db.messages.remove()
+db.conversations.remove()
 
 
 
@@ -124,7 +127,6 @@ def home():
         walls = db.new_walls.find().sort('up_votes', pymongo.DESCENDING)
         return render_template("home.html", walls=walls)
     else:
-        print request.form['b']
         if request.form['b'] == "Inbox":
              return redirect("inbox")
         if request.form['b'] == "Create a Wall!":
@@ -184,18 +186,13 @@ def messages(usr = None):
     if request.method == "GET":
         if usr == None:
             messages = db.messages.find()
-            for message in messages:
-                print message
             return render_template("messages.html", conversation=0)
         else:
             usr = usr.split("_")
             usr.sort()
-            print usr
             while "" in usr:
                 usr.remove("")
-            print "\n", usr, "\n"
             conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
-            print conversation
             if conversation == None:
                 startConversation(usr, db)
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
@@ -266,7 +263,6 @@ def create_w():
 @app.route("/wall/<wall_id>", methods=["GET", "POST"])
 def wall_page(wall_id):
     wall = db.walls.find_one( { 'wall_id' : wall_id } )
-    #print wall
     upped = False
     if wall_id in session['walls_upped']:
         upped = True
@@ -421,9 +417,23 @@ def canvas(wall_id):
 def walls(sort = "new"):
     if request.method == "GET":
         if sort == "new":
-            walls = db.walls.find()
+            wall_curs = db.walls.find()
+            walls = []
+            for wall in wall_curs:
+                walls.append(wall)
+            return render_template("walls.html", walls=walls[::-1])
         if sort == "pop":
             walls = db.walls.find().sort('up_votes', pymongo.DESCENDING)
+        if sort == "mypop":
+            wall_ids = session['walls_upped']
+            walls = []
+            for wall_id in wall_ids:
+                walls.append(db.walls.find_one( { 'wall_id' : wall_id } , { "_id" : False } ))
+        if sort == "mywalls":
+            wall_ids = session['public_walls']
+            walls = []
+            for wall_id in wall_ids:
+                walls.append(db.walls.find_one( { 'wall_id' : wall_id } , { "_id" : False } ))
         return render_template("walls.html", walls=walls)
     else:
         if request.form["b"] == "Log Out":
@@ -463,7 +473,6 @@ def wall_search_update():
     ret = []
     for wall in w:
         ret.append(wall['name'])
-    print ret
     if len(ret) == 0:
         ret.append('')
     if len(ret) == 1:
@@ -482,7 +491,6 @@ def email_search():
     ret = []
     for user in u:
         ret.append(user['email'])
-    print ret
     if len(ret) == 0:
         ret.append('')
     if len(ret) == 1:
