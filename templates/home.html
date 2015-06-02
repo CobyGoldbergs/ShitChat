@@ -9,22 +9,11 @@
 
     <script type=text/javascript src="{{
   url_for('static', filename='jquery.js') }}"></script>
+
+    <script type=text/javascript src="{{
+  url_for('static', filename='script.js') }}"></script>
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
-<script type="text/jsx" src="/static/js/script.js"></script>
-
-<script type=text/javascript>
-  $(function() {
-    $('#name').on('input',function(){
-    $.getJSON($SCRIPT_ROOT + '/_search_wall_update', {
-  name: $('input[name="name"]').val(),
-  }, function(data) {
-        $("#dropDown").get(0).selectedIndex = data;
-  });
-  return false;
-  });
-  });
 </script>
 
     <title>ShitChat</title>
@@ -42,10 +31,11 @@
 	<span style="line-height:5px;">
 	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for a Wall" name="name" style="width:150px;">
-	  <ul class="dropdown-menu" id="dropDown" role="menu" aria-labelledby="dropdownMenu1">
-	    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-	  </ul>
+          <input type="text" class="form-control" placeholder="Search for a Wall" name=name id="name" style="width:150px;" autoComplete="off">
+            <br><span id="one"></span><br>
+            <br><span id="two"></span><br>
+            <br><span id="three"></span><br>
+      </ul>
         </div>
         <input type="submit" name="b" class="btn btn-success" value="Search Wall">
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
@@ -126,20 +116,13 @@
         <div class="col-lg-4">
 		<div class="jumbotron jumbotron" style="height:1000px; background-color: #0B3861;">
 		<div class="container-fixed-right">
-		<center><h2>Announcements</h2></center>
+		<center><h2 id="test">Announcements</h2></center>
 		<h4>Bet</b4>
 		</div>
 		</div>
 	</div>
 </div>
 </div>
-
-<div>
-<h1>jQuery Example</h1>
-<p><input type=text size=5 name=a> +
-   <input type=text size=5 name=b> =
-   <span id=result>?</span>
-<p><a href=# id=calculate>calculate server side</a>
 
 </body>
 

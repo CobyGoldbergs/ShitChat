@@ -6,6 +6,7 @@ import pymongo
 import operator
 import string
 import json
+import re
 
 app = Flask(__name__)
 
@@ -453,8 +454,29 @@ def logout():
     return redirect('home')
 
 @app.route('/_search_wall_update')
-def search_wall_update():
+def wall_search_update():
     name = request.args.get('name', 0, type=str)
+    if name == '':
+        return jsonify(result=['','',''])
+    regx = re.compile("^%s" % name, re.IGNORECASE)
+    w = db.walls.find( {'name': regx }).sort('up_votes', pymongo.DESCENDING)
+    ret = []
+    for wall in w:
+        ret.append(wall['name'])
+    print ret
+    if len(ret) == 0:
+        ret.append('')
+    if len(ret) == 1:
+        ret.append('')
+    if len(ret) == 2:
+        ret.append('')
+    return jsonify(result=ret)
+
+@app.route('/_email_search')
+def email_search():
+    name = request.args.get('name', 0, type=str)
+    print name
+    print "something"
     return jsonify(result=name)
 
 
