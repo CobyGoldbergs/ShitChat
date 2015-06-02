@@ -10,7 +10,6 @@
 
     <script type=text/javascript src="{{
   url_for('static', filename='jquery.js') }}"></script>
-
     <script type=text/javascript src="{{
   url_for('static', filename='script.js') }}"></script>
 <script type=text/javascript>
@@ -91,8 +90,11 @@
 		<div class="row">
 		<form type="POST">
 		<div class="col-sm-9">
-		<input type="text" class="form-control" id="friend" name=friend placeholder="Friend Email">
+		<input type="text" class="form-control" name=friend id="friend" name=friend placeholder="Friend Email" autocomplete="off">
 		</div>
+		<br><span id="friend_one"></span><br>
+		<br><span id="friend_two"></span><br>
+		<br><span id="friend_three"></span><br>
 		<div class="col-sm-2">
 		<input type="submit" name="b" value="Add Friend" class="btn btn-success">
 		</div></div>
