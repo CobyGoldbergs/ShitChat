@@ -29,7 +29,7 @@ db = MongoClient()['users']
     #print u
     #print "SPACE"
 
-#db.conversations.remove()
+db.conversations.remove()
 
 
 
@@ -196,6 +196,10 @@ def messages(usr = None):
             if conversation == None:
                 startConversation(usr, db)
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+                friends = session['friends']
+                friends.append(usr)
+                session['friends'] = friends
+                update_user(session['email'], {'friends': friends}, db)
             return render_template("messages.html", conversation=conversation)
     if request.method == "POST":
         if request.form["b"] == "Log Out":
