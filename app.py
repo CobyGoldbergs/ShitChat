@@ -29,7 +29,7 @@ db = MongoClient()['users']
     #print u
     #print "SPACE"
 
-db.conversations.remove()
+#db.conversations.remove()
 
 
 
