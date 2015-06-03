@@ -341,15 +341,15 @@ def canvas(wall_id):
                     coord_array.append(request_data[b-1])
                     request_array.append(coord_array)
                     coord_array = []
-                    #coord_array.append(int(float(number)))
                 number = ""
             elif(request_data[b].isdigit()):
                 number = number + request_data[b]
             b = b + 1
-        print request_array
+        #print request_array
         thing = wall['edits']
         thing.append(request_array)
         update_wall(wall_id, {'edits': thing}, db)
+        print wall['edits']
 
     if request.method == "POST":
         if request.form["b"] == "up_vote":
