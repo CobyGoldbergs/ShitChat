@@ -6,6 +6,7 @@
   <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/drop.css') }}">
 
 
     <script type=text/javascript src="{{
@@ -36,9 +37,18 @@
 	<form class="navbar-form navbar-left" role="search" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search for a Wall" name=name id="name" style="width:150px;" autoComplete="off">
-            <br><span id="one"></span><br>
-            <br><span id="two"></span><br>
-            <br><span id="three"></span><br>
+            <ul id="search-ac">
+	    <br>
+	    <li id="search-li">
+	      <a href="home.html" id="one"><br></a>
+	    </li>
+	    <li id="search-li">
+	      <a href="home.html" id="two"><br></a>
+	    </li>
+	    <li id="search-li">
+	      <a href="home.html" id="three"><br></a>
+	    </li>
+	    </ul>
         </div>
         <input type="submit" name="b" class="btn btn-success" value="Search Wall">
 

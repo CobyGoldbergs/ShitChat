@@ -16,6 +16,7 @@
 	      $("#three").text(data.result[2]['name']);
 	      var link = "wall/" + data.result[2]['wall_id'];
 	      $("#three").attr("href", link)
+	      $("#search-ac").css({'height': "60px"});
 	  }
 	  else{
 	      $("#three").text(data.result[2]['name']);
