@@ -472,13 +472,19 @@ def wall_search_update():
     w = db.walls.find( {'name': regx }).sort('up_votes', pymongo.DESCENDING)
     ret = []
     for wall in w:
-        ret.append(wall['name'])
+        new_dict = {}
+        new_dict['name'] = wall['name']
+        new_dict['wall_id'] = wall['wall_id']
+        ret.append(new_dict)
+    blank = {}
+    blank['name'] = ''
+    blank['wall_id'] = ''
     if len(ret) == 0:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 1:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 2:
-        ret.append('')
+        ret.append(blank)
     return jsonify(result=ret)
 
 @app.route('/_email_search')
