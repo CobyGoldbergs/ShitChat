@@ -82,10 +82,7 @@
 <div class="col-sm-7">
 <div id="tools">
 
-						<img 
-							src='https://lh4.ggpht.com/lcydxe9aTLvDT5flQ4PldQQswbnrC0tR4IIpTQjPr5PI2fSSvHhlc3ENf2B6DyGZOIY=w300' 
-							id='eraser' width='50' height="50">
-
+						
 						<img height="50" 
 					    	src="http://www.wpclipart.com/education/supplies/markers/text_marker_drawing_orange.svg"
 					     	id="marker" width="50">
@@ -98,6 +95,9 @@
                        	<img
                        		src ='http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Circle-blue.svg/2000px-Circle-blue.svg.png' width='25' 
                        		id='blue' style="visibility:hidden">
+                       	<img
+                       		src ='http://www.clker.com/cliparts/z/4/4/i/C/d/black-circle-md.png' width='25' 
+                       		id='white' style="visibility:hidden">
 					  	  
 					</div>
 </div></div><hr>
@@ -116,7 +116,7 @@
 			var redMarker = document.getElementById("red");
 			var blueMarker = document.getElementById("blue");
 			var greenMarker = document.getElementById("green");
-			var eraser = document.getElementById("eraser");
+			var whiteMarker = document.getElementById("white");
 
 			var editButton = document.getElementById("edit");
 			var mouseDown = 0;
@@ -125,8 +125,7 @@
 			var redSelected = false;
 			var blueSelected = false;
 			var greenSelected = false;
-
-			var eraserSelected = false;
+			var whiteSelected = false;
 
 			var canEdit = false;
 			var whiteEdits = [];
@@ -185,7 +184,7 @@
 			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- green marker");
 			        greenEdits[redEdits.length] = [e.offsetX, e.offsetY];
 			    }
-			    if(eraserSelected){
+			    if(whiteSelected){
 			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- eraser");
 			        whiteEdits[whiteEdits.length] = [e.offsetX, e.offsetY];
 			    }
@@ -196,6 +195,7 @@
 			    document.getElementById("red").style.visibility="visible";
 			    document.getElementById("blue").style.visibility="visible";
 			    document.getElementById("green").style.visibility="visible";
+			    document.getElementById("white").style.visibility="visible";
 
 			});
 
@@ -227,17 +227,14 @@
 			    blueSelected = false;
 			    greenSelected = true;
 			});
-			eraser.addEventListener("click",function(e){
+			whiteMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(255, 255, 255, 1)";
 			    radius= 10;
-			    markerSelected = false;
+			    markerSelected = true;
 			    redSelected = false;
 			    blueSelected = false;
 			    greenSelected = false;
-			    eraserSelected = true;
-			    document.getElementById("red").style.visibility="hidden";
-			    document.getElementById("blue").style.visibility="hidden";
-			    document.getElementById("green").style.visibility="hidden";
+			    whiteSelected = true;
 			});
 			    
 
@@ -250,6 +247,7 @@
 			        document.getElementById("red").style.visibility="hidden";
 			        document.getElementById("blue").style.visibility="hidden";
 			        document.getElementById("green").style.visibility="hidden";
+			        document.getElementById("white").style.visibility="hidden";
 			        //take list of coordinates and upload to the doodle database
 			        console.log(redEdits);
 			        $.getJSON("/canvas/{{wall['wall_id']}}",{red:redEdits, white:whiteEdits});
