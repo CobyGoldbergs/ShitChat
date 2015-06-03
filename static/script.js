@@ -3,7 +3,8 @@
     $.getJSON($SCRIPT_ROOT + '/_search_wall_update', {
   name: $('input[name="name"]').val(),
   }, function(data) {
-  if (data.result[0]){
+  if (data.result[0]['name']){
+      console.log("show");
       $('#search-ac').show();
       $("#one").text(data.result[0]['name']);
       var link = "wall/" + data.result[0]['wall_id'];
@@ -29,6 +30,7 @@
       }
   }
       else {
+	  console.log("hide")
 	  $('#search-ac').hide();
       }
   });

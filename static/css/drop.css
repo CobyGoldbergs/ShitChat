@@ -12,10 +12,14 @@
     }
 }
 
+a {
+    color: black;
+}
+
 #search-ac {
   display: none;
   position: absolute;
-  top: 35px;
+  top: 30px;
   left: 400px;
   right: 888px;
   z-index: 10;
@@ -31,7 +35,7 @@
     height: 30px
 
     &:first-child {
-      margin-top: 1px;
+      margin-top: 5px;
 
       &:before, &:after {
         content: '';
@@ -79,7 +83,7 @@
       position: absolute;
       top: 50%;
       right: 10px;
-      margin-top: -9px;
+      margin-top: 1px;
       width: 18px;
       height: 18px;
       background: url('../img/arrow.png') 0 0 no-repeat;

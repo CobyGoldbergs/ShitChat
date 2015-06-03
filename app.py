@@ -29,7 +29,7 @@ db.walls.remove()
     #print u
     #print "SPACE"
 
-db.conversations.remove()
+#db.conversations.remove()
 
 
 
@@ -338,7 +338,15 @@ def canvas(wall_id):
                 if(len(coord_array) < 2):
                     coord_array.append(int(float(number)))
                 elif(len(coord_array) == 2):
-                    coord_array.append(request_data[b-1])
+                    if(request_data[b-1] == "r"):
+                        coord_array.append(0)
+                    if(request_data[b-1] == "b"):
+                        coord_array.append(1)
+                    if(request_data[b-1] == "g"):
+                        coord_array.append(2)
+                    if(request_data[b-1] == "w"):
+                        coord_array.append(3)
+                    #coord_array.append(request_data[b-1])
                     request_array.append(coord_array)
                     coord_array = []
                 number = ""
@@ -378,7 +386,6 @@ def canvas(wall_id):
             upped = True
         
         return render_template("canvas.html", wall=wall, upped=upped)
-
 @app.route("/walls/<sort>", methods=["GET", "POST"])
 def walls(sort = "new"):
     if request.method == "GET":
