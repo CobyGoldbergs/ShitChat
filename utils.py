@@ -121,8 +121,7 @@ def create_wall(form, session, db):
         wall['contributers'] = []
         wall['num_contributers'] = 0
 
-        wall['white'] = []
-        wall['red'] = []
+        wall['edits'] = []
 
         db.walls.insert(wall)
 

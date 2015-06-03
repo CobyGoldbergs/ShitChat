@@ -82,10 +82,7 @@
 <div class="col-sm-7">
 <div id="tools">
 
-						<img 
-							src='https://lh4.ggpht.com/lcydxe9aTLvDT5flQ4PldQQswbnrC0tR4IIpTQjPr5PI2fSSvHhlc3ENf2B6DyGZOIY=w300' 
-							id='eraser' width='50' height="50">
-
+						
 						<img height="50" 
 					    	src="http://www.wpclipart.com/education/supplies/markers/text_marker_drawing_orange.svg"
 					     	id="marker" width="50">
@@ -98,6 +95,9 @@
                        	<img
                        		src ='http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Circle-blue.svg/2000px-Circle-blue.svg.png' width='25' 
                        		id='blue' style="visibility:hidden">
+                       	<img
+                       		src ='http://www.clker.com/cliparts/z/4/4/i/C/d/black-circle-md.png' width='25' 
+                       		id='white' style="visibility:hidden">
 					  	  
 					</div>
 </div></div><hr>
@@ -116,7 +116,7 @@
 			var redMarker = document.getElementById("red");
 			var blueMarker = document.getElementById("blue");
 			var greenMarker = document.getElementById("green");
-			var eraser = document.getElementById("eraser");
+			var whiteMarker = document.getElementById("white");
 
 			var editButton = document.getElementById("edit");
 			var mouseDown = 0;
@@ -125,10 +125,10 @@
 			var redSelected = false;
 			var blueSelected = false;
 			var greenSelected = false;
-
-			var eraserSelected = false;
+			var whiteSelected = false;
 
 			var canEdit = false;
+			var edits = [];
 			var whiteEdits = [];
 			var redEdits = [];
 			var blueEdits = [];
@@ -142,27 +142,15 @@
 			}
 			window.onload = function() {
 			    ctx.fillStyle ="rgba(0, 10, 25, 0)";
-			    redEdits = {{wall['red']}};
-			    whiteEdits = {{wall['white']}};
-			    console.log(redEdits);
-			    console.log(whiteEdits);
+			    edits = {{wall['edits']}};
 
 			    //load red doodles
 			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
-			    for(var i = 0; i < redEdits[redEdits.length-1].length; i++){
+			    for(var i = 0; i < edits[edits.length-1].length; i++){
 			    	console.log(i);
-			    	console.log(redEdits[redEdits.length-1][i]);
+			    	console.log(edits[edits.length-1][i]);
 					ctx.beginPath();
-					ctx.arc(redEdits[redEdits.length-1][i][0], redEdits[redEdits.length-1][i][1], 10, 0,2*Math.PI);
-					ctx.fill();
-			    }
-			    //load white doodles
-			    ctx.fillStyle ="rgba(255, 255, 255, 1)";
-			    for(var i = 0; i < whiteEdits[whiteEdits.length-1].length; i++){
-			    	console.log(i);
-			    	console.log(whiteEdits[whiteEdits.length-1][i]);
-					ctx.beginPath();
-					ctx.arc(whiteEdits[whiteEdits.length-1][i][0], whiteEdits[whiteEdits.length-1][i][1], 10, 0,2*Math.PI);
+					ctx.arc(edits[edits.length-1][i][0], edits[edits.length-1][i][1], 10, 0,2*Math.PI);
 					ctx.fill();
 			    }
 			};
@@ -174,21 +162,22 @@
 			    ctx.fill();
 			    //stores circle data
 			    if(redSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- red marker");
-			        redEdits[redEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- red marker");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "red"];
 			    }
 			    if(blueSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- blue marker");
-			        blueEdits[redEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- blue marker");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "blue"];
 			    }
 			    if(greenSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- green marker");
-			        greenEdits[redEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- green marker");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "green"];
 			    }
-			    if(eraserSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- eraser");
-			        whiteEdits[whiteEdits.length] = [e.offsetX, e.offsetY];
+			    if(whiteSelected){
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- white");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "white"];
 			    }
+			    console.log(edits[edits.length-1])
 			}
 
 
@@ -196,13 +185,14 @@
 			    document.getElementById("red").style.visibility="visible";
 			    document.getElementById("blue").style.visibility="visible";
 			    document.getElementById("green").style.visibility="visible";
+			    document.getElementById("white").style.visibility="visible";
 
 			});
 
 			redMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
 			    radius= 10;
-			    eraserSelected = false;
+			    whiteSelected = false;
 			    markerSelected = true;
 			    redSelected = true;
 			    blueSelected = false;
@@ -212,7 +202,7 @@
 			blueMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(0, 0, 255, 1)";
 			    radius= 10;
-			    eraserSelected = false;
+			    whiteSelected = false;
 			    markerSelected = true;
 			    redSelected = false;
 			    blueSelected = true;
@@ -221,23 +211,20 @@
 			greenMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(0, 255, 0, 1)";
 			    radius= 10;
-			    eraserSelected = false;
+			    whiteSelected = false;
 			    markerSelected = true;
 			    redSelected = false;
 			    blueSelected = false;
 			    greenSelected = true;
 			});
-			eraser.addEventListener("click",function(e){
+			whiteMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(255, 255, 255, 1)";
 			    radius= 10;
-			    markerSelected = false;
+			    markerSelected = true;
 			    redSelected = false;
 			    blueSelected = false;
 			    greenSelected = false;
-			    eraserSelected = true;
-			    document.getElementById("red").style.visibility="hidden";
-			    document.getElementById("blue").style.visibility="hidden";
-			    document.getElementById("green").style.visibility="hidden";
+			    whiteSelected = true;
 			});
 			    
 
@@ -250,11 +237,13 @@
 			        document.getElementById("red").style.visibility="hidden";
 			        document.getElementById("blue").style.visibility="hidden";
 			        document.getElementById("green").style.visibility="hidden";
+			        document.getElementById("white").style.visibility="hidden";
 			        //take list of coordinates and upload to the doodle database
 			        console.log(redEdits);
-			        $.getJSON("/canvas/{{wall['wall_id']}}",{red:redEdits, white:whiteEdits});
-			        //whiteEdits = [];
+			        $.getJSON("/canvas/{{wall['wall_id']}}",{edits: edits});
+			        whiteEdits = [];
 			        redEdits = [];
+			        edits = [];
 
 			    }
 			    canEdit = !canEdit;
