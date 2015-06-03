@@ -112,9 +112,24 @@
 <div class="jumbotron jumbotron" style="height:100%; background-color: #0B3861; overflow: scroll;">
 		<div class="container-fixed-right">
 		<div class="row">
-		<form type="POST">
+		<form role="search" type="POST">
 		<div class="col-sm-9">
-		<input type="text" class="form-control" name="friend" placeholder="Friend Email">
+
+
+
+		<input type="text" class="form-control" role="search" name="friend" id="friend" placeholder="Friend Email" autocomplete="off">
+		<ul id="search-ac-friend">
+		  <br>
+		  <li id="search-li-friend">
+		    <a href="home.html" id="friend_one"><br></a>
+		  </li>
+		  <li id="search-li-friend">
+		    <a href="home.html" id="friend_two"><br></a>
+		  </li>
+		  <li id="search-li-friend">
+		    <a href="home.html" id="friend_three"><br></a>
+		  </li>
+		</ul>
 		</div>
 		<div class="col-sm-2">
 		<input type="submit" name="b" value="Add Friend" class="btn btn-success">

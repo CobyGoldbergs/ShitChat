@@ -452,6 +452,7 @@ def wall_search_update():
 
 @app.route('/_email_search')
 def email_search():
+    print "something"
     name = request.args.get('name', 0, type=str)
     if name == '':
         return jsonify(result=['','',''])
@@ -459,13 +460,20 @@ def email_search():
     u = db.users.find( {'email': regx })
     ret = []
     for user in u:
-        ret.append(user['email'])
+        print user
+        new_dict = {}
+        new_dict['email'] = user['email']
+        new_dict['id'] = "_" + user['email'] + "_" + session['email']
+        ret.append(new_dict)
+    blank = {}
+    blank['email'] = ''
+    blank['id'] = ''
     if len(ret) == 0:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 1:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 2:
-        ret.append('')
+        ret.append(blank)
     return jsonify(result=ret)
 
 
