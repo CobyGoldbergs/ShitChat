@@ -3,12 +3,37 @@
     $.getJSON($SCRIPT_ROOT + '/_search_wall_update', {
   name: $('input[name="name"]').val(),
   }, function(data) {
-  $("#one").text(data.result[0]);
-  $("#two").text(data.result[1]);
-  $("#three").text(data.result[2]);
+  if (data.result[0]){
+      $('#search-ac').show();
+      $("#one").text(data.result[0]['name']);
+      var link = "wall/" + data.result[0]['wall_id'];
+      $("#one").attr("href", link)
+      if (data.result[1]['name']){
+	  $("#two").text(data.result[1]['name']);
+	  var link = "wall/" + data.result[1]['wall_id'];
+	  $("#two").attr("href", link)
+	  if (data.result[2]['name']){
+	      $("#three").text(data.result[2]['name']);
+	      var link = "wall/" + data.result[2]['wall_id'];
+	      $("#three").attr("href", link)
+	      $("#search-ac").css({'height': "60px"});
+	  }
+	  else{
+	      $("#three").text(data.result[2]['name']);
+	      $("#search-ac").css({'height': "45px"});
+	  }
+      }
+      else{
+	  $("#two").text(data.result[1]['name']);
+	  $("#search-ac").css({'height': "30px"});
+      }
+  }
+      else {
+	  $('#search-ac').hide();
+      }
   });
-  return false;
-  });
+	return false;
+    });
   });
 
 
@@ -17,10 +42,36 @@
     $.getJSON($SCRIPT_ROOT + '/_email_search', {
   name: $('input[name="friend"]').val(),
   }, function(data) {
-  $("#friend_one").text(data.result[0]);
-  $("#friend_two").text(data.result[1]);
-  $("#friend_three").text(data.result[2]);
+  if (data.result[0]['email']){
+      console.log("in");
+      $('#search-ac-friend').show();
+      $("#friend_one").text(data.result[0]['email']);
+      var link = "messages/" + data.result[0]['id'];
+      $("#friend_one").attr("href", link)
+      if (data.result[1]['email']){
+	  $("#friend_two").text(data.result[1]['email']);
+	  var link = "messages/" + data.result[1]['id'];
+	  $("#friend_two").attr("href", link)
+	  if (data.result[2]['email']){
+	      $("#friend_three").text(data.result[2]['email']);
+	      var link = "messages/" + data.result[2]['id'];
+	      $("#friend_three").attr("href", link)
+	      $("#search-ac-friend").css({'height': "60px"});
+	  }
+	  else{
+	      $("#friend_three").text(data.result[2]['email']);
+	      $("#search-ac-friend").css({'height': "45px"});
+	  }
+      }
+      else{
+	  $("#friend_two").text(data.result[1]['email']);
+	  $("#search-ac-friend").css({'height': "30px"});
+      }
+  }
+      else {
+	  $('#search-ac-friend').hide();
+      };
   });
-  return false;
-  });
+	return false;
+    });
   });

@@ -142,7 +142,11 @@
 			}
 			window.onload = function() {
 			    ctx.fillStyle ="rgba(0, 10, 25, 0)";
+<<<<<<< HEAD
 			    console.log({{wall['edits']}});
+=======
+			    edits = {{wall['edits']}};
+>>>>>>> f8b88a99c65e5efc1b892df4cb8827af02f5e0e6
 
 			    //load red doodles
 			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
@@ -239,8 +243,17 @@
 			        document.getElementById("green").style.visibility="hidden";
 			        document.getElementById("white").style.visibility="hidden";
 			        //take list of coordinates and upload to the doodle database
+<<<<<<< HEAD
 			        $.getJSON("/canvas/{{wall['wall_id']}}",{edits: edits});
 			        edits = [];
+=======
+			        console.log(redEdits);
+			        $.getJSON("/canvas/{{wall['wall_id']}}",{edits: edits});
+			        whiteEdits = [];
+			        redEdits = [];
+			        edits = [];
+
+>>>>>>> f8b88a99c65e5efc1b892df4cb8827af02f5e0e6
 			    }
 			    canEdit = !canEdit;
 			});

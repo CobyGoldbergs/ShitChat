@@ -345,11 +345,14 @@ def canvas(wall_id):
             elif(request_data[b].isdigit()):
                 number = number + request_data[b]
             b = b + 1
-        #print request_array
         thing = wall['edits']
         thing.append(request_array)
         update_wall(wall_id, {'edits': thing}, db)
         print wall['edits']
+        print request_array
+        thing = wall['edits']
+        thing.append(request_array)
+        update_wall(wall_id, {'edits': thing}, db)
 
     if request.method == "POST":
         if request.form["b"] == "up_vote":
@@ -435,17 +438,24 @@ def wall_search_update():
     w = db.walls.find( {'name': regx }).sort('up_votes', pymongo.DESCENDING)
     ret = []
     for wall in w:
-        ret.append(wall['name'])
+        new_dict = {}
+        new_dict['name'] = wall['name']
+        new_dict['wall_id'] = wall['wall_id']
+        ret.append(new_dict)
+    blank = {}
+    blank['name'] = ''
+    blank['wall_id'] = ''
     if len(ret) == 0:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 1:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 2:
-        ret.append('')
+        ret.append(blank)
     return jsonify(result=ret)
 
 @app.route('/_email_search')
 def email_search():
+    print "something"
     name = request.args.get('name', 0, type=str)
     if name == '':
         return jsonify(result=['','',''])
@@ -453,13 +463,20 @@ def email_search():
     u = db.users.find( {'email': regx })
     ret = []
     for user in u:
-        ret.append(user['email'])
+        print user
+        new_dict = {}
+        new_dict['email'] = user['email']
+        new_dict['id'] = "_" + user['email'] + "_" + session['email']
+        ret.append(new_dict)
+    blank = {}
+    blank['email'] = ''
+    blank['id'] = ''
     if len(ret) == 0:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 1:
-        ret.append('')
+        ret.append(blank)
     if len(ret) == 2:
-        ret.append('')
+        ret.append(blank)
     return jsonify(result=ret)
 
 
