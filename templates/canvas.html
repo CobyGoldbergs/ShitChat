@@ -128,6 +128,7 @@
 			var whiteSelected = false;
 
 			var canEdit = false;
+			var edits = [];
 			var whiteEdits = [];
 			var redEdits = [];
 			var blueEdits = [];
@@ -141,27 +142,15 @@
 			}
 			window.onload = function() {
 			    ctx.fillStyle ="rgba(0, 10, 25, 0)";
-			    redEdits = {{wall['red']}};
-			    whiteEdits = {{wall['white']}};
-			    console.log(redEdits);
-			    console.log(whiteEdits);
+			    edits = {{wall['edits']}};
 
 			    //load red doodles
 			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
-			    for(var i = 0; i < redEdits[redEdits.length-1].length; i++){
+			    for(var i = 0; i < edits[edits.length-1].length; i++){
 			    	console.log(i);
-			    	console.log(redEdits[redEdits.length-1][i]);
+			    	console.log(edits[edits.length-1][i]);
 					ctx.beginPath();
-					ctx.arc(redEdits[redEdits.length-1][i][0], redEdits[redEdits.length-1][i][1], 10, 0,2*Math.PI);
-					ctx.fill();
-			    }
-			    //load white doodles
-			    ctx.fillStyle ="rgba(255, 255, 255, 1)";
-			    for(var i = 0; i < whiteEdits[whiteEdits.length-1].length; i++){
-			    	console.log(i);
-			    	console.log(whiteEdits[whiteEdits.length-1][i]);
-					ctx.beginPath();
-					ctx.arc(whiteEdits[whiteEdits.length-1][i][0], whiteEdits[whiteEdits.length-1][i][1], 10, 0,2*Math.PI);
+					ctx.arc(edits[edits.length-1][i][0], edits[edits.length-1][i][1], 10, 0,2*Math.PI);
 					ctx.fill();
 			    }
 			};
@@ -173,21 +162,22 @@
 			    ctx.fill();
 			    //stores circle data
 			    if(redSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- red marker");
-			        redEdits[redEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- red marker");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "red"];
 			    }
 			    if(blueSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- blue marker");
-			        blueEdits[redEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- blue marker");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "blue"];
 			    }
 			    if(greenSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- green marker");
-			        greenEdits[redEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- green marker");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "green"];
 			    }
 			    if(whiteSelected){
-			        console.log("(" + e.offsetX + ", " + e.offsetY + ") --- eraser");
-			        whiteEdits[whiteEdits.length] = [e.offsetX, e.offsetY];
+			        //console.log("(" + e.offsetX + ", " + e.offsetY + ") --- white");
+			        edits[edits.length] = [e.offsetX, e.offsetY, "white"];
 			    }
+			    console.log(edits[edits.length-1])
 			}
 
 
@@ -202,7 +192,7 @@
 			redMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(255, 0, 0, 1)";
 			    radius= 10;
-			    eraserSelected = false;
+			    whiteSelected = false;
 			    markerSelected = true;
 			    redSelected = true;
 			    blueSelected = false;
@@ -212,7 +202,7 @@
 			blueMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(0, 0, 255, 1)";
 			    radius= 10;
-			    eraserSelected = false;
+			    whiteSelected = false;
 			    markerSelected = true;
 			    redSelected = false;
 			    blueSelected = true;
@@ -221,7 +211,7 @@
 			greenMarker.addEventListener("click",function(e){
 			    ctx.fillStyle ="rgba(0, 255, 0, 1)";
 			    radius= 10;
-			    eraserSelected = false;
+			    whiteSelected = false;
 			    markerSelected = true;
 			    redSelected = false;
 			    blueSelected = false;
@@ -250,9 +240,10 @@
 			        document.getElementById("white").style.visibility="hidden";
 			        //take list of coordinates and upload to the doodle database
 			        console.log(redEdits);
-			        $.getJSON("/canvas/{{wall['wall_id']}}",{red:redEdits, white:whiteEdits});
-			        //whiteEdits = [];
+			        $.getJSON("/canvas/{{wall['wall_id']}}",{edits: edits});
+			        whiteEdits = [];
 			        redEdits = [];
+			        edits = [];
 
 			    }
 			    canEdit = !canEdit;

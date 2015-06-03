@@ -300,93 +300,56 @@ def wall_page(wall_id):
 def canvas(wall_id):
 
     wall = db.walls.find_one( {'wall_id':wall_id} )
-    red = json.loads(json.dumps(request.args.get("red")))
-    white = json.loads(json.dumps(request.args.get("white")))
+    #red = json.loads(json.dumps(request.args.get("red")))
+    #white = json.loads(json.dumps(request.args.get("white")))
+    all_edits = json.loads(json.dumps(request.args.get("edits")))
 
+    #REQUEST HANDLING
     #red_request_string = request.query_string
-    red_request_string = ""
-    white_request_string = ""
-    stop_red = False
-    for x in range(0, len(request.query_string)):
-        if(request.query_string[x] == "w"):
-            stop_red = True
-        elif(not(stop_red)):
-            red_request_string = red_request_string + request.query_string[x]
-        elif(stop_red):
-            white_request_string = white_request_string + request.query_string[x]
+    request_string = request.query_string
 
-    red_request_data = ""
-    if(len(red_request_string) > 0):
+    request_data = ""
+    if(len(request_string) > 0):
         x = 0
-        while(x < len(red_request_string) - 2):
-            if(red_request_string[x-1] == "="):
+        while(x < len(request_string) - 2):
+            if(request_string[x-1] == "="):
                 j = 0;
-                while(len(red_request_string) > j+x and red_request_string[j+x].isdigit()):
-                    red_request_data = red_request_data + red_request_string[j+x]
-                    if(j+x+1 >= len(red_request_string)):
-                        red_request_data = red_request_data + ","
-                    elif(not(red_request_string[j+x+1].isdigit())):
-                        red_request_data = red_request_data + ","
-                    j = j + 1
+                if(request_string[x] == "r" or request_string[x] == "b" or request_string[x] == "g" or request_string[x] == "w"):
+                    request_data = request_data + request_string[x] + ","
+                else:
+                    while(len(request_string) > j+x and request_string[j+x].isdigit()):
+                        request_data = request_data + request_string[j+x]
+                        if(j+x+1 >= len(request_string)):
+                            request_data = request_data + ","
+                        elif(not(request_string[j+x+1].isdigit())):
+                            request_data = request_data + ","
+                        j = j + 1
             x = x + 1
-    red_request_data = red_request_data + "0,0,"
-    if(len(red_request_string) > 0):
+    request_data = request_data + "0,0,w"
+    print request_data + "\n"
+
+    if(len(request_string) > 0):
         request_array = []
         b = 0
         number = ""
         coord_array = []
-        while (b < len(red_request_data)):
-            if(red_request_data[b] == ","):
+        while (b < len(request_data)):
+            if(request_data[b] == ","):
                 if(len(coord_array) < 2):
                     coord_array.append(int(float(number)))
                 elif(len(coord_array) == 2):
+                    coord_array.append(request_data[b-1])
                     request_array.append(coord_array)
                     coord_array = []
-                    coord_array.append(int(float(number)))
+                    #coord_array.append(int(float(number)))
                 number = ""
-            else:
-                number = number + red_request_data[b]
+            elif(request_data[b].isdigit()):
+                number = number + request_data[b]
             b = b + 1
-        red_thing = wall['red']
-        red_thing.append(request_array)
-        update_wall(wall_id, {'red': red_thing}, db)
-
-    white_request_data = ""
-    if(len(white_request_string) > 0):
-        x = 0
-        while(x < len(white_request_string) - 2):
-            if(white_request_string[x-1] == "="):
-                j = 0;
-                while(len(white_request_string) > j+x and white_request_string[j+x].isdigit()):
-                    white_request_data = white_request_data + white_request_string[j+x]
-                    if(j+x+1 >= len(white_request_string)):
-                        white_request_data = white_request_data + ","
-                    elif(not(white_request_string[j+x+1].isdigit())):
-                        white_request_data = white_request_data + ","
-                    j = j + 1
-            x = x + 1
-
-    white_request_data = white_request_data + "0,0,"
-    if(len(white_request_string) > 0):
-        request_array = []
-        b = 0
-        number = ""
-        coord_array = []
-        while (b < len(white_request_data)):
-            if(white_request_data[b] == ","):
-                if(len(coord_array) < 2):
-                    coord_array.append(int(float(number)))
-                elif(len(coord_array) == 2):
-                    request_array.append(coord_array)
-                    coord_array = []
-                    coord_array.append(int(float(number)))
-                number = ""
-            else:
-                number = number + white_request_data[b]
-            b = b + 1
-        white_thing = wall['white']
-        white_thing.append(request_array)
-        update_wall(wall_id, {'white': white_thing}, db)
+        print request_array
+        thing = wall['edits']
+        thing.append(request_array)
+        update_wall(wall_id, {'edits': thing}, db)
 
     if request.method == "POST":
         if request.form["b"] == "up_vote":
