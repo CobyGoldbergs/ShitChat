@@ -22,7 +22,7 @@ db = MongoClient()['users']
 
 #Tue May 26 22:16:53 2015
 
-#db.new_walls.remove()
+db.walls.remove()
 
 #users = db.users.find()
 #for u in users:
