@@ -146,7 +146,7 @@
 		{% else %}
 		<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
 		{% endif %}
-		<a href="messages/{{ friend['email'] }}"> {{friend['first_name']}} {{friend['last_name']}}</a></h4><br>
+		<a href="/messages/_{{friend['email']}}_{{session['email']}}"> {{friend['first_name']}} {{friend['last_name']}}</a></h4><br>
 		{% endfor %}
 		</div>
 		</div>
