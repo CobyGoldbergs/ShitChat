@@ -64,6 +64,8 @@ def register():
                 return render_template("register.html", message = message)
         elif request.form["b"] == "Log In":
             return redirect("login")
+        elif request.form["b"] == "Cancel":
+            return redirect("register")
         elif request.form["b"] == "About":
             return redirect("about")
         else:
