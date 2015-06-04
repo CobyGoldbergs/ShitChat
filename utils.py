@@ -72,8 +72,7 @@ def authenticate(email, password, db):
         return None
         
 #add a friend to a user
-def add_friend(form, session, db):
-    email = str(form['name'])
+def add_friend(email, session, db):
     user = db.users.find_one( { 'email' : email } , { "_id" : False } )
     if user == None:
         return False
@@ -83,6 +82,13 @@ def add_friend(form, session, db):
             return False
     friends.append(user)
     update_user(session['email'], {'friends': friends}, db)
+
+    #update other's dict
+    friends = user['friends']
+    you = db.users.find_one( { 'email' : session['email'] } , { "_id" : False } )
+    friends.append(you)
+    update_user(email, {'friends': friends}, db)
+    
     return True
 
 # update_dict must be in the form {field_to_update : new_val}

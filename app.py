@@ -9,28 +9,23 @@ import json
 import re
 
 app = Flask(__name__)
-
-# mongo 
+ 
 #conn = Connection()
 db = MongoClient()['users']
 
 
 
-#db.hot_walls.ensure_index( { "createdAt": 1 }, { 'expireAfterSeconds': 60 } )
-
-
-
 #Tue May 26 22:16:53 2015
 
+#db.new_walls.remove()
 #db.walls.remove()
+#db.messages.remove()
+#db.users.remove()
 
-#print "hey"
 #users = db.users.find()
 #for u in users:
     #print u
-    #print "SPACE"
 
-#db.messages.remove()
 
 def auth(page):
     def decorate(f):
@@ -174,7 +169,7 @@ def inbox():
                 return redirect('home')
             return render_template("search_results.html", walls = x)
         if request.form['b'] == "Search User":
-            add_friend(request.form, session, db)
+            add_friend(str(request.form['name']), session, db)
             user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
             session['friends'] = user['friends']
             return redirect('home')
@@ -185,13 +180,10 @@ def inbox():
 @auth("/messages/<usr>")
 def messages(usr = None):
     if request.method == "GET":
-        print session['friends']
-        print session['email']
         if usr == None:
             messages = db.messages.find()
             return render_template("messages.html", conversation=0)
         else:
-            print session['friends']
             usr = usr.split("_")
             usr.sort()
             while "" in usr:
@@ -200,26 +192,10 @@ def messages(usr = None):
             if conversation == None:
                 startConversation(usr, db)
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
-                friends = session['friends']
-                user = db.users.find_one({'email': usr[0]})
-                print "HERE"
-                print user
+                add_friend(usr[1], session, db)
+                user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
+                session['friends'] = user['friends']
 
-                friend_dict = {}
-                friend_dict['email'] = user['email']
-                friend_dict['first_name'] = user['first_name']
-                friend_dict['last_name'] = user['last_name']
-                friends.append(friend_dict)
-                session['friends'] = friends
-                update_user(session['email'], {'friends': friends}, db)
-
-                friends_other = user['friends']
-                user_dict = {}
-                user_dict['email'] = session['email']
-                user_dict['first_name'] = session['first_name']
-                user_dict['last_name'] = session['last_name']
-                friends_other.append(user_dict)
-                update_user(usr[0], {'friends': user_dict}, db)
             return render_template("messages.html", conversation=conversation)
     if request.method == "POST":
         if request.form["b"] == "Log Out":
@@ -238,7 +214,6 @@ def messages(usr = None):
             session['friends'] = user['friends']
             return redirect('home')
         else:
-            print "hit send\n"
             message = request.form["textbox1"]
             if usr == None:
                 print "getting usr...\n"
@@ -246,12 +221,11 @@ def messages(usr = None):
                 usr = request.form["usr"].replace(" ", "").split(",")
                 usr.append(session['email'])
                 usr.sort()
-                print usr
                 startConversation(usr, db)
             else:
                 usr = usr.split("_")
                 usr.sort()
-                while "" in usr:                    
+                while "" in usr:       
                     usr.remove("")
                 print usr
                 sendMessage(session['email'], usr, message, db)
