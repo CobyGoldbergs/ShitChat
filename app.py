@@ -22,7 +22,7 @@ db = MongoClient()['users']
 
 #Tue May 26 22:16:53 2015
 
-db.walls.remove()
+#db.walls.remove()
 
 #print "hey"
 #users = db.users.find()
@@ -30,7 +30,7 @@ db.walls.remove()
     #print u
     #print "SPACE"
 
-db.messages.remove()
+#db.messages.remove()
 
 def auth(page):
     def decorate(f):

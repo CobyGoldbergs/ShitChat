@@ -84,10 +84,10 @@
           {% for message in messages %}
           {% if message[0] == session['first_name'] %}
           <h5 style="color: #0AF7FF;">{{message[0]}}:</h5>
-	  <h5>{{message[2]}}</h5>
+	  <span title="{{message[1]}}"><h5 style="font-family: 'Comic Sans MS', cursive, sans-serif;">{{message[2]}}</h5></span>
 	  {% else %}
            <h5 style="color: red;">{{message[0]}}:</h5>
-	  <h5>{{message[2]}}</h5>
+	  <span title="{{message[1]}}"><h5 style="font-family: 'Comic Sans MS', cursive, sans-serif;">{{message[2]}}</h5></span>
 	  {% endif %}
 		<hr>
           {% endfor %}
