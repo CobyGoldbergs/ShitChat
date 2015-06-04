@@ -24,14 +24,13 @@ db = MongoClient()['users']
 
 db.walls.remove()
 
+#print "hey"
 #users = db.users.find()
 #for u in users:
     #print u
     #print "SPACE"
 
-#db.conversations.remove()
-
-
+db.messages.remove()
 
 def auth(page):
     def decorate(f):
@@ -184,10 +183,13 @@ def inbox():
 @auth("/messages/<usr>")
 def messages(usr = None):
     if request.method == "GET":
+        print session['friends']
+        print session['email']
         if usr == None:
             messages = db.messages.find()
             return render_template("messages.html", conversation=0)
         else:
+            print session['friends']
             usr = usr.split("_")
             usr.sort()
             while "" in usr:
@@ -196,6 +198,26 @@ def messages(usr = None):
             if conversation == None:
                 startConversation(usr, db)
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+                friends = session['friends']
+                user = db.users.find_one({'email': usr[0]})
+                print "HERE"
+                print user
+
+                friend_dict = {}
+                friend_dict['email'] = user['email']
+                friend_dict['first_name'] = user['first_name']
+                friend_dict['last_name'] = user['last_name']
+                friends.append(friend_dict)
+                session['friends'] = friends
+                update_user(session['email'], {'friends': friends}, db)
+
+                friends_other = user['friends']
+                user_dict = {}
+                user_dict['email'] = session['email']
+                user_dict['first_name'] = session['first_name']
+                user_dict['last_name'] = session['last_name']
+                friends_other.append(user_dict)
+                update_user(usr[0], {'friends': user_dict}, db)
             return render_template("messages.html", conversation=conversation)
     if request.method == "POST":
         if request.form["b"] == "Log Out":
