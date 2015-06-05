@@ -66,17 +66,14 @@
 <div class="row">
 <div class="col-lg-8">
 
-    <form method="POST">
-    <button type="submit" name="b" class="btn btn-success" value="New Message">New Message</button>
-    </form>
-
 {% for con in conversations %}
 
     {% set emails = con['tag'] %}
     
-    {% set tag = {'usr' : "", other:""} %}
+    {% set tag = {'usr' : "", 'other' : "" , 'index':0} %}
     {% set usr = "" %}
     {% set other = "" %}
+    {% set count = 0 %}
     
     {% for email in emails %}
         
@@ -84,13 +81,26 @@
         {% if tag.update({'usr': usr}) %} {% endif %}
         
         
-        {% if email != sender %} {% set other = other + email + ", " %} {% endif %}
+        {% if email != sender %} {% set other = other + email + ", " %} {% set count = count + 1 %}
+        
+        {% else %} {% if tag.update({'index' : count}) %}{% endif %}
+        
+        {% endif %}
+        
+        
+        
         {% if tag.update({'other': other}) %} {% endif %}
         
     {% endfor %}
     
-    <a href='/messages/{{tag['usr']}}' >{{ tag['other'] }}</a> <br>
-
+    {% set other = tag['other'] %}
+    {% set other = other|truncate( (other|length) - 2 , True, "") %}
+    
+    
+    {% set unread = con['unread'][tag['index']] %}
+    
+    <a href='/messages/{{tag['usr']}}' >  <h5 style="color: red;">{{other}} </h5> </a> {{unread}}
+    <hr>
 {% endfor %}
 
 </div>

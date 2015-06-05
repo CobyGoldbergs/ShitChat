@@ -141,7 +141,11 @@ def home():
             session['friends'] = user['friends']
             return redirect('home')
             
-            
+
+
+#def _message_update():
+    
+
 
 #simple inbox to see past conversations
 @app.route("/inbox", methods=["GET", "POST"])
@@ -182,21 +186,36 @@ def messages(usr = None):
     if request.method == "GET":
         if usr == None:
             messages = db.messages.find()
-            return render_template("messages.html", conversation=0)
+            
+            #for message in messages:
+            # print message
+            return render_template("messages.html", conversation=0, sender = session['email'])
         else:
             usr = usr.split("_")
             usr.sort()
+            #print usr
             while "" in usr:
                 usr.remove("")
+        #print "\n", usr, "\n"
             conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
+            #print conversation
             if conversation == None:
                 startConversation(usr, db)
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
-                add_friend(usr[1], session, db)
-                user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
-                session['friends'] = user['friends']
+            
+            count = 0
+            index = 0
+            for email in conversation['tag']:
+                if email == session['email']:
+                    index = count
+                else:
+                    count += 1
 
-            return render_template("messages.html", conversation=conversation)
+# print index, "\n"
+            conversation['unread'][index] = 0
+            update_message(usr, {'unread' : conversation['unread']}, db)
+            
+            return render_template("messages.html", conversation=conversation, sender = session['email'])
     if request.method == "POST":
         if request.form["b"] == "Log Out":
             return logout()

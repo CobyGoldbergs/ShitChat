@@ -289,6 +289,12 @@ def startConversation(tag, db):
 
     newCon['messages'] = []
 
+    newCon['unread'] = []
+
+    for email in tag:
+        newCon['unread'].append(0)
+    
+
     db.messages.insert(newCon)
 
 
@@ -320,8 +326,17 @@ def sendMessage(email, tag, message, db):
     messages = con['messages']
 
     messages.append(newMessage)
-
-    update_message(tag, {'messages' : messages}, db)
+    
+    unread = con['unread']
+    
+    emails = con['tag']
+    
+    for i in range(len(emails)):
+        if emails[i] == email:
+            unread[i] = 0
+        else:
+            unread[i] = unread[i] + 1
+    update_message(tag, {'messages' : messages, 'unread' : unread}, db)
 
 
 
