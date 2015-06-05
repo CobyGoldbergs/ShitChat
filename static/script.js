@@ -17,11 +17,11 @@
 	      $("#three").text(data.result[2]['name']);
 	      var link = "wall/" + data.result[2]['wall_id'];
 	      $("#three").attr("href", link)
-	      $("#search-ac").css({'height': "60px"});
+	      $("#search-ac").css({'height': "90px"});
 	  }
 	  else{
 	      $("#three").text(data.result[2]['name']);
-	      $("#search-ac").css({'height': "45px"});
+	      $("#search-ac").css({'height': "60px"});
 	  }
       }
       else{
@@ -58,11 +58,11 @@
 	      $("#friend_three").text(data.result[2]['email']);
 	      var link = "messages/" + data.result[2]['id'];
 	      $("#friend_three").attr("href", link)
-	      $("#search-ac-friend").css({'height': "60px"});
+	      $("#search-ac-friend").css({'height': "90px"});
 	  }
 	  else{
 	      $("#friend_three").text(data.result[2]['email']);
-	      $("#search-ac-friend").css({'height': "45px"});
+	      $("#search-ac-friend").css({'height': "60px"});
 	  }
       }
       else{
