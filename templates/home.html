@@ -73,8 +73,11 @@
     <h4 class="list-group-item-heading">{{w['name']}}</h4>
     <p class="list-group-item-text">{{w['description']}}</p><br>
     <p>Tags: {% for tag in w['tags'] %}
-      <span style="background-color: #0B3861;" class="label label-default">{{tag}}</span> 
+      <span style="background-color: #0B3861;" class="label label-default">{{tag}}</span>
       {% endfor %}
+      {% if w['type'] == 'drawing' %}
+      <span class="badge" style="background-color: #FFFF0D; float: right;">Draw</span>
+      {% endif %}
     </p>
   </a>
   {% endfor %}
