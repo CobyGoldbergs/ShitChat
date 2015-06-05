@@ -53,9 +53,25 @@
     To:<input name="usr" id="usr" type="text" value="example@email.com">
     {% else %}
     {% set rec = conversation['tag'] %}
-    <h4>Conversation with {% for n in rec %}{{n}}, {% endfor %}</h4>
+    
+    {% set tag = {'other':""} %}
+    {% set other = "" %}
+    
+    {% for email in rec %}
+    
+    {% if email != sender %} {% set other = other + email + ", " %} {% endif %}
+    
+    {% if tag.update({'other': other}) %} {% endif %}
+    
+    {% endfor %}
+    
+    
+    {% set other = tag['other'] %}
+    {% set other = other|truncate( (other|length) - 2 , True, "") %}
+
+<h4>Conversation with {{other}}</h4>
     {% endif %}
-      <div style="overflow:scroll; height:80%; width: 100%; border:1px solid black; scrollTop:scrollHeight; padding-left:5px; background-color: #252E33;" id="block">
+      <div style="overflow:scroll; height:80%; width: 100%; border:1px solid black; scrollTop:scrollHeight; padding-left:5px; background-color: #252E33;" id="MessageBlock">
           {% if conversation != 0 %}
           {% set messages = conversation['messages']  %}
           {% for message in messages %}
@@ -63,7 +79,7 @@
           <h5 style="color: #0AF7FF;">{{message[0]}}:</h5>
 	  <h5>{{message[2]}}</h5>
 	  {% else %}
-           <h5 style="color: red;">{{message[0]}}:</h5>
+      <h5 style="color: red;">{{message[0]}}:</h5>
 	  <h5>{{message[2]}}</h5>
 	  {% endif %}
 		<hr>
@@ -73,6 +89,10 @@
       </div>
 
 <br>
+<script>
+    var element = document.getElementById("MessageBlock");
+    element.scrollTop = element.scrollHeight;
+</script>
 
 
 	<div class="row">
