@@ -106,7 +106,9 @@
 {{unread}}
 </span>
 <h4 class="list-group-item-heading">{{other}}</h4>
+{% if con['messages'] != [] %}
 <p class="list-group-item-text">{{con['messages'][-1][0]}}: {{con['messages'][-1][2]}}</p><br>
+{% endif %}
 
   </a>
 {% endfor %}

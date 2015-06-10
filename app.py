@@ -24,7 +24,7 @@ db = MongoClient()['users']
 
 #users = db.users.find()
 #for u in users:
-    #print u
+ #   print u
 
 
 def auth(page):
@@ -201,6 +201,9 @@ def messages(usr = None):
             #print conversation
             if conversation == None:
                 startConversation(usr, db)
+                add_friend(usr[1], session, db)
+                user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
+                session['friends'] = user['friends']
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
             
             count = 0
