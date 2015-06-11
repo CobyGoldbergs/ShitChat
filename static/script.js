@@ -17,16 +17,16 @@
 	      $("#three").text(data.result[2]['name']);
 	      var link = "wall/" + data.result[2]['wall_id'];
 	      $("#three").attr("href", link)
-	      $("#search-ac").css({'height': "90px"});
+	      $("#search-ac").css({'height': "95px"});
 	  }
 	  else{
 	      $("#three").text(data.result[2]['name']);
-	      $("#search-ac").css({'height': "60px"});
+	      $("#search-ac").css({'height': "65px"});
 	  }
       }
       else{
 	  $("#two").text(data.result[1]['name']);
-	  $("#search-ac").css({'height': "30px"});
+	  $("#search-ac").css({'height': "35px"});
       }
   }
       else {
