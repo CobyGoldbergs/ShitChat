@@ -33,25 +33,22 @@
 	<li><a href="/walls/pop">Walls <span class="sr-only">(current)</span></a></li>
     </ul>
 	<span style="line-height:5px;">
-
-	<form class="navbar-form navbar-left" role="search" method="POST">
+	<form class="navbar-form navbar-left search" role="search" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for a Wall" name=name id="name" style="width:150px;" autoComplete="off">
-            <ul id="search-ac">
-	    <br>
+          <input type="search" class="form-control" placeholder="Search for a Wall" name=name id="name" style="width:150px;" autoComplete="off">
+	  <ul class="dropdown-menu" role="menu"  id="search-ac">
 	    <li id="search-li">
-	      <a href="home.html" id="one"><br></a>
+	      <a href="home.html" id="one"></a>
 	    </li>
 	    <li id="search-li">
-	      <a href="home.html" id="two"><br></a>
+	      <a href="home.html" id="two"></a>
 	    </li>
 	    <li id="search-li">
-	      <a href="home.html" id="three"><br></a>
+	      <a href="home.html" id="three"></a>
 	    </li>
-	    </ul>
+	  </ul>
         </div>
         <input type="submit" name="b" class="btn btn-success" value="Search Wall">
-
 	<input type="submit" name="b" class="btn btn-info" value="Create a Wall!">
       </form>
 	</span>

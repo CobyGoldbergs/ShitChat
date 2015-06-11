@@ -59,9 +59,11 @@
 </nav>
 </head>
 
-<body style="padding-top:70px">
+<body style="padding-top:70px; background-image:url('./static/TextureUseamlessUtileUfloorUbu.jpg');">
 <div class="container-fluid">
-  
+{% if message is defined %}
+<span class="alert alert-danger alert-dismissable">{{ message }}</span>
+{% endif %}
 <div class="row">
 <div class="col-lg-8">
 <h1>Trending Stall Walls</h1>
