@@ -1,6 +1,7 @@
 import hashlib, uuid #for password security
 from time import ctime
 import datetime
+import re
 
 ##########################     LOGIN/ REGISTER        ##########################
 
@@ -203,7 +204,10 @@ def add_comment(form, current_wall, session, db):
     
 def search_wall(form, db):
     name = form['name']
-    wall_name = db.walls.find( { 'name' : name } , { "_id" : False } )
+    if name == '':
+        return []
+    regx = re.compile("^%s" % name, re.IGNORECASE)
+    wall_name = db.walls.find( { 'name' : regx } , { "_id" : False } )
     wall_tags = db.walls.find( { 'tags': { '$in': [name]}}, { "_id" : False } )
     ret = []
     for w in wall_name:
