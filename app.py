@@ -273,7 +273,7 @@ def create_w():
                 return redirect('home')
             else:
                 return redirect('create_wall')
-        if request.form['b'] == "search":
+        if request.form['b'] == "Search Wall":
             x = search_wall(request.form, db)
             if x == []:
                 flash('invalid search')
