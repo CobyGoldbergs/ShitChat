@@ -179,7 +179,7 @@ def add_comment(form, current_wall, session, db):
 
     comment['color'] = form['color']
     #Points comment to a user
-    comment['user_id'] = session['user_id']
+    comment['user_id'] = session['email']
     name = str(session['first_name'] + " " + session['last_name']) #For ease of displaying the name
     comment['user_name'] = name
 
