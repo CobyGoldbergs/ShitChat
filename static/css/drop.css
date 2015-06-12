@@ -109,7 +109,6 @@ a {
   left: 15px;
   right: 15px;
   z-index: 10;
-  background: #0B3861;
   border: 1px solid;
   border-color: #cbcfe2 #c8cee7 #c4c7d7;
   border-radius: 3px;
@@ -118,7 +117,6 @@ a {
 
   li {
     display: block;
-    height: 20px
 
     &:first-child {
       margin-top: 1px;
@@ -189,6 +187,6 @@ a {
 
 
 #search-li, #search-li-friend  {
-    height: 30px;
+   
     list-style-type: none;
 }
