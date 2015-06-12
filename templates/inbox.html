@@ -59,7 +59,7 @@
 </nav>
 </head>
     
-    <body style="padding-top:70px">
+    <body style="padding-top:70px; background-image:url('../static/TextureUseamlessUtileUfloorUbu.jpg');">
     <div class="container-fluid">
 
 <div class="row">
@@ -100,10 +100,12 @@
     
     {% set unread = con['unread'][tag['index']] %}
     
-    <a href='/messages/{{tag['usr']}}' class="list-group-item"> 
-<span class="badge" style="background-color: #088A29;">
+    <a href='/messages/{{tag['usr']}}' class="list-group-item">
+{% if unread > 0 %}
+<span class="badge" style="background-color: red;">
 {{unread}}
 </span>
+{% endif %}
 <h4 class="list-group-item-heading">{{other}}</h4>
 {% if con['messages'] != [] %}
 <p class="list-group-item-text">{{con['messages'][-1][0]}}: {{con['messages'][-1][2]}}</p><br>
