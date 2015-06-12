@@ -78,8 +78,10 @@ def add_friend(email, session, db):
     if user == None:
         return False
     friends = session['friends']
+    print friends
     for friend in friends:
         if friend['email'] == user['email']:
+            print "NAH"
             return False
     friends.append(user)
     update_user(session['email'], {'friends': friends}, db)

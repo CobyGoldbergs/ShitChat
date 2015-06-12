@@ -152,6 +152,8 @@ def home():
 @auth("/inbox")
 def inbox():
     if request.method == "GET":
+        print "!!!!!!"
+        print session['friends']
         messages = db.messages.find()
         conversations = []
         for conversation in messages:
@@ -201,7 +203,10 @@ def messages(usr = None):
             #print conversation
             if conversation == None:
                 startConversation(usr, db)
-                add_friend(usr[1], session, db)
+                if usr[1] == session['email']:
+                    add_friend(usr[0], session, db)
+                else:
+                    add_friend(usr[1], session, db)
                 user = db.users.find_one( { 'email' : session['email'] } , { "_id" : False })
                 session['friends'] = user['friends']
                 conversation = db.messages.find_one({'tag' : usr}, {"_id" : False})
