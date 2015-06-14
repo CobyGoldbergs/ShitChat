@@ -495,11 +495,11 @@ def email_search():
     u = db.users.find( {'email': regx })
     ret = []
     for user in u:
-        print user
-        new_dict = {}
-        new_dict['email'] = user['email']
-        new_dict['id'] = "_" + user['email'] + "_" + session['email']
-        ret.append(new_dict)
+        if user['email'] != session['email']:
+            new_dict = {}
+            new_dict['email'] = user['email']
+            new_dict['id'] = "_" + user['email'] + "_" + session['email']
+            ret.append(new_dict)
     blank = {}
     blank['email'] = ''
     blank['id'] = ''
