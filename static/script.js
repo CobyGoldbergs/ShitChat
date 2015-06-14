@@ -58,16 +58,16 @@
 	      $("#friend_three").text(data.result[2]['email']);
 	      var link = "messages/" + data.result[2]['id'];
 	      $("#friend_three").attr("href", link)
-	      $("#search-ac-friend").css({'height': "90px"});
+	      $("#search-ac-friend").css({'height': "95px"});
 	  }
 	  else{
 	      $("#friend_three").text(data.result[2]['email']);
-	      $("#search-ac-friend").css({'height': "60px"});
+	      $("#search-ac-friend").css({'height': "65px"});
 	  }
       }
       else{
 	  $("#friend_two").text(data.result[1]['email']);
-	  $("#search-ac-friend").css({'height': "30px"});
+	  $("#search-ac-friend").css({'height': "35px"});
       }
   }
       else {

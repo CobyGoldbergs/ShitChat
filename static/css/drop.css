@@ -117,9 +117,10 @@ a {
 
   li {
     display: block;
+    height: 30px;
 
     &:first-child {
-      margin-top: 1px;
+      margin-top: 5px;
 
       &:before, &:after {
         content: '';
